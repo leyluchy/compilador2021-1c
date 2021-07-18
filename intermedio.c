@@ -4,6 +4,8 @@
 #include <stdarg.h>
 #include <string.h>
 #include <math.h>
+#define CADENA_MAXIMA 1024
+
 
 //Pila
 typedef struct

@@ -153,7 +153,7 @@ bloque:
 
 sentencia: 
       asignacion
-	  |asignacion_mult
+	    |asignacion_mult
       |decision
       |iteracion
       |salida
