@@ -1,0 +1,39 @@
+WRITE "Testeando comparadores"
+
+IF (1 < 2) {
+	WRITE "< funciona :)"	
+}
+
+IF (2 > 1) {
+	WRITE "> funciona :)"	
+}
+
+IF (1 != 2) {
+	WRITE "!= funciona :)"	
+}
+
+IF (1 == 1) {
+	WRITE "== funciona :)"	
+}
+
+IF (1 >= 1) {
+	WRITE ">= funciona :)"	
+}
+
+IF (1 <= 1) {
+	WRITE "<= funciona :)"	
+}
+
+WRITE "Testeando operadores booleanos"
+
+IF (1 < 2 && 2 < 3) {
+	WRITE "AND funciona :)"	
+}
+
+IF (1 > 2 || 2 < 3) {
+	WRITE "OR funciona :)"	
+}
+
+IF ((1!= 1 && 2 != 2) || 1 == 1) {
+	WRITE "() funciona :)"	
+}

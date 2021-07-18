@@ -1,0 +1,1402 @@
+Terminals unused in grammar
+
+   START
+   END
+   ENDWHILE
+   THEN
+   ENDIF
+
+
+Grammar
+
+    0 $accept: start $end
+
+    1 start: programa
+
+    2 programa: bloque_declaracion bloque
+    3         | bloque
+
+    4 bloque_declaracion: DECVAR declaraciones ENDDEC
+
+    5 declaraciones: declaraciones declaracion
+    6              | declaracion
+
+    7 declaracion: lista_id DOS_PUNTOS tipo_variable
+
+    8 tipo_variable: INT
+    9              | FLOAT
+   10              | STRING
+
+   11 lista_id: lista_id COMA ID
+   12         | ID
+
+   13 bloque: bloque sentencia
+   14       | sentencia
+
+   15 sentencia: asignacion
+   16          | asignacion_mult
+   17          | decision
+   18          | iteracion
+   19          | salida
+   20          | entrada
+
+   21 salida: WRITE CTE_INT
+   22       | WRITE CTE_FLOAT
+   23       | WRITE CTE_STRING
+   24       | WRITE ID
+
+   25 entrada: READ ID
+
+   26 asignacion: ID ASIG expresion
+   27           | ID ASIG CTE_STRING
+
+   28 asignacion_mult: lista ASIGMULT expresion
+
+   29 lista: ID ASIGMULT ID
+   30      | lista ASIGMULT ID
+
+   31 iteracion: WHILE PA condicion PC LLA bloque LLC
+
+   32 decision: IF PA condicion PC LLA bloque LLC
+   33         | IF PA condicion PC LLA bloque LLC ELSE LLA bloque LLC
+
+   34 condicion: comparacion OR comparacion
+   35          | comparacion AND comparacion
+   36          | comparacion
+   37          | NOT comparacion
+   38          | between
+
+   39 comparacion: expresion comparador expresion
+   40            | expresion
+
+   41 between: BETWEEN PA ID COMA CA expresion PUNTO_COMA expresion CC PC
+
+   42 comparador: MAYOR
+   43           | MAYOR_IGUAL
+   44           | MENOR_IGUAL
+   45           | MENOR
+   46           | IGUAL
+   47           | DISTINTO
+
+   48 expresion: termino
+   49          | expresion MENOS termino
+   50          | expresion MAS termino
+
+   51 termino: factor
+   52        | termino POR factor
+   53        | termino DIVIDIDO factor
+   54        | termino DIV factor
+   55        | termino MOD factor
+
+   56 factor: ID
+   57       | CTE_INT
+   58       | MENOS CTE_INT
+   59       | CTE_FLOAT
+   60       | MENOS CTE_FLOAT
+   61       | PA expresion PC
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+START (258)
+END (259)
+DECVAR (260) 4
+ENDDEC (261) 4
+INT (262) 8
+FLOAT (263) 9
+STRING (264) 10
+WHILE (265) 31
+ENDWHILE (266)
+IF (267) 32 33
+THEN (268)
+ELSE (269) 33
+ENDIF (270)
+AND (271) 35
+OR (272) 34
+NOT (273) 37
+ASIG (274) 26 27
+ASIGMULT (275) 28 29 30
+MAS (276) 50
+MENOS (277) 49 58 60
+POR (278) 52
+DIVIDIDO (279) 53
+MOD (280) 55
+DIV (281) 54
+BETWEEN (282) 41
+MENOR (283) 45
+MAYOR (284) 42
+MENOR_IGUAL (285) 44
+MAYOR_IGUAL (286) 43
+IGUAL (287) 46
+DISTINTO (288) 47
+PA (289) 31 32 33 41 61
+PC (290) 31 32 33 41 61
+CA (291) 41
+CC (292) 41
+LLA (293) 31 32 33
+LLC (294) 31 32 33
+COMA (295) 11 41
+PUNTO_COMA (296) 41
+DOS_PUNTOS (297) 7
+READ (298) 25
+WRITE (299) 21 22 23 24
+ID (300) 11 12 24 25 26 27 29 30 41 56
+CTE_INT (301) 21 57 58
+CTE_FLOAT (302) 22 59 60
+CTE_STRING (303) 23 27
+
+
+Nonterminals, with rules where they appear
+
+$accept (49)
+    on left: 0
+start (50)
+    on left: 1, on right: 0
+programa (51)
+    on left: 2 3, on right: 1
+bloque_declaracion (52)
+    on left: 4, on right: 2
+declaraciones (53)
+    on left: 5 6, on right: 4 5
+declaracion (54)
+    on left: 7, on right: 5 6
+tipo_variable (55)
+    on left: 8 9 10, on right: 7
+lista_id (56)
+    on left: 11 12, on right: 7 11
+bloque (57)
+    on left: 13 14, on right: 2 3 13 31 32 33
+sentencia (58)
+    on left: 15 16 17 18 19 20, on right: 13 14
+salida (59)
+    on left: 21 22 23 24, on right: 19
+entrada (60)
+    on left: 25, on right: 20
+asignacion (61)
+    on left: 26 27, on right: 15
+asignacion_mult (62)
+    on left: 28, on right: 16
+lista (63)
+    on left: 29 30, on right: 28 30
+iteracion (64)
+    on left: 31, on right: 18
+decision (65)
+    on left: 32 33, on right: 17
+condicion (66)
+    on left: 34 35 36 37 38, on right: 31 32 33
+comparacion (67)
+    on left: 39 40, on right: 34 35 36 37
+between (68)
+    on left: 41, on right: 38
+comparador (69)
+    on left: 42 43 44 45 46 47, on right: 39
+expresion (70)
+    on left: 48 49 50, on right: 26 28 39 40 41 49 50 61
+termino (71)
+    on left: 51 52 53 54 55, on right: 48 49 50 52 53 54 55
+factor (72)
+    on left: 56 57 58 59 60 61, on right: 51 52 53 54 55
+
+
+state 0
+
+    0 $accept: . start $end
+
+    DECVAR  shift, and go to state 1
+    WHILE   shift, and go to state 2
+    IF      shift, and go to state 3
+    READ    shift, and go to state 4
+    WRITE   shift, and go to state 5
+    ID      shift, and go to state 6
+
+    start               go to state 7
+    programa            go to state 8
+    bloque_declaracion  go to state 9
+    bloque              go to state 10
+    sentencia           go to state 11
+    salida              go to state 12
+    entrada             go to state 13
+    asignacion          go to state 14
+    asignacion_mult     go to state 15
+    lista               go to state 16
+    iteracion           go to state 17
+    decision            go to state 18
+
+
+state 1
+
+    4 bloque_declaracion: DECVAR . declaraciones ENDDEC
+
+    ID  shift, and go to state 19
+
+    declaraciones  go to state 20
+    declaracion    go to state 21
+    lista_id       go to state 22
+
+
+state 2
+
+   31 iteracion: WHILE . PA condicion PC LLA bloque LLC
+
+    PA  shift, and go to state 23
+
+
+state 3
+
+   32 decision: IF . PA condicion PC LLA bloque LLC
+   33         | IF . PA condicion PC LLA bloque LLC ELSE LLA bloque LLC
+
+    PA  shift, and go to state 24
+
+
+state 4
+
+   25 entrada: READ . ID
+
+    ID  shift, and go to state 25
+
+
+state 5
+
+   21 salida: WRITE . CTE_INT
+   22       | WRITE . CTE_FLOAT
+   23       | WRITE . CTE_STRING
+   24       | WRITE . ID
+
+    ID          shift, and go to state 26
+    CTE_INT     shift, and go to state 27
+    CTE_FLOAT   shift, and go to state 28
+    CTE_STRING  shift, and go to state 29
+
+
+state 6
+
+   26 asignacion: ID . ASIG expresion
+   27           | ID . ASIG CTE_STRING
+   29 lista: ID . ASIGMULT ID
+
+    ASIG      shift, and go to state 30
+    ASIGMULT  shift, and go to state 31
+
+
+state 7
+
+    0 $accept: start . $end
+
+    $end  shift, and go to state 32
+
+
+state 8
+
+    1 start: programa .
+
+    $default  reduce using rule 1 (start)
+
+
+state 9
+
+    2 programa: bloque_declaracion . bloque
+
+    WHILE  shift, and go to state 2
+    IF     shift, and go to state 3
+    READ   shift, and go to state 4
+    WRITE  shift, and go to state 5
+    ID     shift, and go to state 6
+
+    bloque           go to state 33
+    sentencia        go to state 11
+    salida           go to state 12
+    entrada          go to state 13
+    asignacion       go to state 14
+    asignacion_mult  go to state 15
+    lista            go to state 16
+    iteracion        go to state 17
+    decision         go to state 18
+
+
+state 10
+
+    3 programa: bloque .
+   13 bloque: bloque . sentencia
+
+    WHILE  shift, and go to state 2
+    IF     shift, and go to state 3
+    READ   shift, and go to state 4
+    WRITE  shift, and go to state 5
+    ID     shift, and go to state 6
+
+    $default  reduce using rule 3 (programa)
+
+    sentencia        go to state 34
+    salida           go to state 12
+    entrada          go to state 13
+    asignacion       go to state 14
+    asignacion_mult  go to state 15
+    lista            go to state 16
+    iteracion        go to state 17
+    decision         go to state 18
+
+
+state 11
+
+   14 bloque: sentencia .
+
+    $default  reduce using rule 14 (bloque)
+
+
+state 12
+
+   19 sentencia: salida .
+
+    $default  reduce using rule 19 (sentencia)
+
+
+state 13
+
+   20 sentencia: entrada .
+
+    $default  reduce using rule 20 (sentencia)
+
+
+state 14
+
+   15 sentencia: asignacion .
+
+    $default  reduce using rule 15 (sentencia)
+
+
+state 15
+
+   16 sentencia: asignacion_mult .
+
+    $default  reduce using rule 16 (sentencia)
+
+
+state 16
+
+   28 asignacion_mult: lista . ASIGMULT expresion
+   30 lista: lista . ASIGMULT ID
+
+    ASIGMULT  shift, and go to state 35
+
+
+state 17
+
+   18 sentencia: iteracion .
+
+    $default  reduce using rule 18 (sentencia)
+
+
+state 18
+
+   17 sentencia: decision .
+
+    $default  reduce using rule 17 (sentencia)
+
+
+state 19
+
+   12 lista_id: ID .
+
+    $default  reduce using rule 12 (lista_id)
+
+
+state 20
+
+    4 bloque_declaracion: DECVAR declaraciones . ENDDEC
+    5 declaraciones: declaraciones . declaracion
+
+    ENDDEC  shift, and go to state 36
+    ID      shift, and go to state 19
+
+    declaracion  go to state 37
+    lista_id     go to state 22
+
+
+state 21
+
+    6 declaraciones: declaracion .
+
+    $default  reduce using rule 6 (declaraciones)
+
+
+state 22
+
+    7 declaracion: lista_id . DOS_PUNTOS tipo_variable
+   11 lista_id: lista_id . COMA ID
+
+    COMA        shift, and go to state 38
+    DOS_PUNTOS  shift, and go to state 39
+
+
+state 23
+
+   31 iteracion: WHILE PA . condicion PC LLA bloque LLC
+
+    NOT        shift, and go to state 40
+    MENOS      shift, and go to state 41
+    BETWEEN    shift, and go to state 42
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    condicion    go to state 47
+    comparacion  go to state 48
+    between      go to state 49
+    expresion    go to state 50
+    termino      go to state 51
+    factor       go to state 52
+
+
+state 24
+
+   32 decision: IF PA . condicion PC LLA bloque LLC
+   33         | IF PA . condicion PC LLA bloque LLC ELSE LLA bloque LLC
+
+    NOT        shift, and go to state 40
+    MENOS      shift, and go to state 41
+    BETWEEN    shift, and go to state 42
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    condicion    go to state 53
+    comparacion  go to state 48
+    between      go to state 49
+    expresion    go to state 50
+    termino      go to state 51
+    factor       go to state 52
+
+
+state 25
+
+   25 entrada: READ ID .
+
+    $default  reduce using rule 25 (entrada)
+
+
+state 26
+
+   24 salida: WRITE ID .
+
+    $default  reduce using rule 24 (salida)
+
+
+state 27
+
+   21 salida: WRITE CTE_INT .
+
+    $default  reduce using rule 21 (salida)
+
+
+state 28
+
+   22 salida: WRITE CTE_FLOAT .
+
+    $default  reduce using rule 22 (salida)
+
+
+state 29
+
+   23 salida: WRITE CTE_STRING .
+
+    $default  reduce using rule 23 (salida)
+
+
+state 30
+
+   26 asignacion: ID ASIG . expresion
+   27           | ID ASIG . CTE_STRING
+
+    MENOS       shift, and go to state 41
+    PA          shift, and go to state 43
+    ID          shift, and go to state 44
+    CTE_INT     shift, and go to state 45
+    CTE_FLOAT   shift, and go to state 46
+    CTE_STRING  shift, and go to state 54
+
+    expresion  go to state 55
+    termino    go to state 51
+    factor     go to state 52
+
+
+state 31
+
+   29 lista: ID ASIGMULT . ID
+
+    ID  shift, and go to state 56
+
+
+state 32
+
+    0 $accept: start $end .
+
+    $default  accept
+
+
+state 33
+
+    2 programa: bloque_declaracion bloque .
+   13 bloque: bloque . sentencia
+
+    WHILE  shift, and go to state 2
+    IF     shift, and go to state 3
+    READ   shift, and go to state 4
+    WRITE  shift, and go to state 5
+    ID     shift, and go to state 6
+
+    $default  reduce using rule 2 (programa)
+
+    sentencia        go to state 34
+    salida           go to state 12
+    entrada          go to state 13
+    asignacion       go to state 14
+    asignacion_mult  go to state 15
+    lista            go to state 16
+    iteracion        go to state 17
+    decision         go to state 18
+
+
+state 34
+
+   13 bloque: bloque sentencia .
+
+    $default  reduce using rule 13 (bloque)
+
+
+state 35
+
+   28 asignacion_mult: lista ASIGMULT . expresion
+   30 lista: lista ASIGMULT . ID
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 57
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    expresion  go to state 58
+    termino    go to state 51
+    factor     go to state 52
+
+
+state 36
+
+    4 bloque_declaracion: DECVAR declaraciones ENDDEC .
+
+    $default  reduce using rule 4 (bloque_declaracion)
+
+
+state 37
+
+    5 declaraciones: declaraciones declaracion .
+
+    $default  reduce using rule 5 (declaraciones)
+
+
+state 38
+
+   11 lista_id: lista_id COMA . ID
+
+    ID  shift, and go to state 59
+
+
+state 39
+
+    7 declaracion: lista_id DOS_PUNTOS . tipo_variable
+
+    INT     shift, and go to state 60
+    FLOAT   shift, and go to state 61
+    STRING  shift, and go to state 62
+
+    tipo_variable  go to state 63
+
+
+state 40
+
+   37 condicion: NOT . comparacion
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    comparacion  go to state 64
+    expresion    go to state 50
+    termino      go to state 51
+    factor       go to state 52
+
+
+state 41
+
+   58 factor: MENOS . CTE_INT
+   60       | MENOS . CTE_FLOAT
+
+    CTE_INT    shift, and go to state 65
+    CTE_FLOAT  shift, and go to state 66
+
+
+state 42
+
+   41 between: BETWEEN . PA ID COMA CA expresion PUNTO_COMA expresion CC PC
+
+    PA  shift, and go to state 67
+
+
+state 43
+
+   61 factor: PA . expresion PC
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    expresion  go to state 68
+    termino    go to state 51
+    factor     go to state 52
+
+
+state 44
+
+   56 factor: ID .
+
+    $default  reduce using rule 56 (factor)
+
+
+state 45
+
+   57 factor: CTE_INT .
+
+    $default  reduce using rule 57 (factor)
+
+
+state 46
+
+   59 factor: CTE_FLOAT .
+
+    $default  reduce using rule 59 (factor)
+
+
+state 47
+
+   31 iteracion: WHILE PA condicion . PC LLA bloque LLC
+
+    PC  shift, and go to state 69
+
+
+state 48
+
+   34 condicion: comparacion . OR comparacion
+   35          | comparacion . AND comparacion
+   36          | comparacion .
+
+    AND  shift, and go to state 70
+    OR   shift, and go to state 71
+
+    $default  reduce using rule 36 (condicion)
+
+
+state 49
+
+   38 condicion: between .
+
+    $default  reduce using rule 38 (condicion)
+
+
+state 50
+
+   39 comparacion: expresion . comparador expresion
+   40            | expresion .
+   49 expresion: expresion . MENOS termino
+   50          | expresion . MAS termino
+
+    MAS          shift, and go to state 72
+    MENOS        shift, and go to state 73
+    MENOR        shift, and go to state 74
+    MAYOR        shift, and go to state 75
+    MENOR_IGUAL  shift, and go to state 76
+    MAYOR_IGUAL  shift, and go to state 77
+    IGUAL        shift, and go to state 78
+    DISTINTO     shift, and go to state 79
+
+    $default  reduce using rule 40 (comparacion)
+
+    comparador  go to state 80
+
+
+state 51
+
+   48 expresion: termino .
+   52 termino: termino . POR factor
+   53        | termino . DIVIDIDO factor
+   54        | termino . DIV factor
+   55        | termino . MOD factor
+
+    POR       shift, and go to state 81
+    DIVIDIDO  shift, and go to state 82
+    MOD       shift, and go to state 83
+    DIV       shift, and go to state 84
+
+    $default  reduce using rule 48 (expresion)
+
+
+state 52
+
+   51 termino: factor .
+
+    $default  reduce using rule 51 (termino)
+
+
+state 53
+
+   32 decision: IF PA condicion . PC LLA bloque LLC
+   33         | IF PA condicion . PC LLA bloque LLC ELSE LLA bloque LLC
+
+    PC  shift, and go to state 85
+
+
+state 54
+
+   27 asignacion: ID ASIG CTE_STRING .
+
+    $default  reduce using rule 27 (asignacion)
+
+
+state 55
+
+   26 asignacion: ID ASIG expresion .
+   49 expresion: expresion . MENOS termino
+   50          | expresion . MAS termino
+
+    MAS    shift, and go to state 72
+    MENOS  shift, and go to state 73
+
+    $default  reduce using rule 26 (asignacion)
+
+
+state 56
+
+   29 lista: ID ASIGMULT ID .
+
+    $default  reduce using rule 29 (lista)
+
+
+state 57
+
+   30 lista: lista ASIGMULT ID .
+   56 factor: ID .
+
+    ASIGMULT  reduce using rule 30 (lista)
+    $default  reduce using rule 56 (factor)
+
+
+state 58
+
+   28 asignacion_mult: lista ASIGMULT expresion .
+   49 expresion: expresion . MENOS termino
+   50          | expresion . MAS termino
+
+    MAS    shift, and go to state 72
+    MENOS  shift, and go to state 73
+
+    $default  reduce using rule 28 (asignacion_mult)
+
+
+state 59
+
+   11 lista_id: lista_id COMA ID .
+
+    $default  reduce using rule 11 (lista_id)
+
+
+state 60
+
+    8 tipo_variable: INT .
+
+    $default  reduce using rule 8 (tipo_variable)
+
+
+state 61
+
+    9 tipo_variable: FLOAT .
+
+    $default  reduce using rule 9 (tipo_variable)
+
+
+state 62
+
+   10 tipo_variable: STRING .
+
+    $default  reduce using rule 10 (tipo_variable)
+
+
+state 63
+
+    7 declaracion: lista_id DOS_PUNTOS tipo_variable .
+
+    $default  reduce using rule 7 (declaracion)
+
+
+state 64
+
+   37 condicion: NOT comparacion .
+
+    $default  reduce using rule 37 (condicion)
+
+
+state 65
+
+   58 factor: MENOS CTE_INT .
+
+    $default  reduce using rule 58 (factor)
+
+
+state 66
+
+   60 factor: MENOS CTE_FLOAT .
+
+    $default  reduce using rule 60 (factor)
+
+
+state 67
+
+   41 between: BETWEEN PA . ID COMA CA expresion PUNTO_COMA expresion CC PC
+
+    ID  shift, and go to state 86
+
+
+state 68
+
+   49 expresion: expresion . MENOS termino
+   50          | expresion . MAS termino
+   61 factor: PA expresion . PC
+
+    MAS    shift, and go to state 72
+    MENOS  shift, and go to state 73
+    PC     shift, and go to state 87
+
+
+state 69
+
+   31 iteracion: WHILE PA condicion PC . LLA bloque LLC
+
+    LLA  shift, and go to state 88
+
+
+state 70
+
+   35 condicion: comparacion AND . comparacion
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    comparacion  go to state 89
+    expresion    go to state 50
+    termino      go to state 51
+    factor       go to state 52
+
+
+state 71
+
+   34 condicion: comparacion OR . comparacion
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    comparacion  go to state 90
+    expresion    go to state 50
+    termino      go to state 51
+    factor       go to state 52
+
+
+state 72
+
+   50 expresion: expresion MAS . termino
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    termino  go to state 91
+    factor   go to state 52
+
+
+state 73
+
+   49 expresion: expresion MENOS . termino
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    termino  go to state 92
+    factor   go to state 52
+
+
+state 74
+
+   45 comparador: MENOR .
+
+    $default  reduce using rule 45 (comparador)
+
+
+state 75
+
+   42 comparador: MAYOR .
+
+    $default  reduce using rule 42 (comparador)
+
+
+state 76
+
+   44 comparador: MENOR_IGUAL .
+
+    $default  reduce using rule 44 (comparador)
+
+
+state 77
+
+   43 comparador: MAYOR_IGUAL .
+
+    $default  reduce using rule 43 (comparador)
+
+
+state 78
+
+   46 comparador: IGUAL .
+
+    $default  reduce using rule 46 (comparador)
+
+
+state 79
+
+   47 comparador: DISTINTO .
+
+    $default  reduce using rule 47 (comparador)
+
+
+state 80
+
+   39 comparacion: expresion comparador . expresion
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    expresion  go to state 93
+    termino    go to state 51
+    factor     go to state 52
+
+
+state 81
+
+   52 termino: termino POR . factor
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    factor  go to state 94
+
+
+state 82
+
+   53 termino: termino DIVIDIDO . factor
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    factor  go to state 95
+
+
+state 83
+
+   55 termino: termino MOD . factor
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    factor  go to state 96
+
+
+state 84
+
+   54 termino: termino DIV . factor
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    factor  go to state 97
+
+
+state 85
+
+   32 decision: IF PA condicion PC . LLA bloque LLC
+   33         | IF PA condicion PC . LLA bloque LLC ELSE LLA bloque LLC
+
+    LLA  shift, and go to state 98
+
+
+state 86
+
+   41 between: BETWEEN PA ID . COMA CA expresion PUNTO_COMA expresion CC PC
+
+    COMA  shift, and go to state 99
+
+
+state 87
+
+   61 factor: PA expresion PC .
+
+    $default  reduce using rule 61 (factor)
+
+
+state 88
+
+   31 iteracion: WHILE PA condicion PC LLA . bloque LLC
+
+    WHILE  shift, and go to state 2
+    IF     shift, and go to state 3
+    READ   shift, and go to state 4
+    WRITE  shift, and go to state 5
+    ID     shift, and go to state 6
+
+    bloque           go to state 100
+    sentencia        go to state 11
+    salida           go to state 12
+    entrada          go to state 13
+    asignacion       go to state 14
+    asignacion_mult  go to state 15
+    lista            go to state 16
+    iteracion        go to state 17
+    decision         go to state 18
+
+
+state 89
+
+   35 condicion: comparacion AND comparacion .
+
+    $default  reduce using rule 35 (condicion)
+
+
+state 90
+
+   34 condicion: comparacion OR comparacion .
+
+    $default  reduce using rule 34 (condicion)
+
+
+state 91
+
+   50 expresion: expresion MAS termino .
+   52 termino: termino . POR factor
+   53        | termino . DIVIDIDO factor
+   54        | termino . DIV factor
+   55        | termino . MOD factor
+
+    POR       shift, and go to state 81
+    DIVIDIDO  shift, and go to state 82
+    MOD       shift, and go to state 83
+    DIV       shift, and go to state 84
+
+    $default  reduce using rule 50 (expresion)
+
+
+state 92
+
+   49 expresion: expresion MENOS termino .
+   52 termino: termino . POR factor
+   53        | termino . DIVIDIDO factor
+   54        | termino . DIV factor
+   55        | termino . MOD factor
+
+    POR       shift, and go to state 81
+    DIVIDIDO  shift, and go to state 82
+    MOD       shift, and go to state 83
+    DIV       shift, and go to state 84
+
+    $default  reduce using rule 49 (expresion)
+
+
+state 93
+
+   39 comparacion: expresion comparador expresion .
+   49 expresion: expresion . MENOS termino
+   50          | expresion . MAS termino
+
+    MAS    shift, and go to state 72
+    MENOS  shift, and go to state 73
+
+    $default  reduce using rule 39 (comparacion)
+
+
+state 94
+
+   52 termino: termino POR factor .
+
+    $default  reduce using rule 52 (termino)
+
+
+state 95
+
+   53 termino: termino DIVIDIDO factor .
+
+    $default  reduce using rule 53 (termino)
+
+
+state 96
+
+   55 termino: termino MOD factor .
+
+    $default  reduce using rule 55 (termino)
+
+
+state 97
+
+   54 termino: termino DIV factor .
+
+    $default  reduce using rule 54 (termino)
+
+
+state 98
+
+   32 decision: IF PA condicion PC LLA . bloque LLC
+   33         | IF PA condicion PC LLA . bloque LLC ELSE LLA bloque LLC
+
+    WHILE  shift, and go to state 2
+    IF     shift, and go to state 3
+    READ   shift, and go to state 4
+    WRITE  shift, and go to state 5
+    ID     shift, and go to state 6
+
+    bloque           go to state 101
+    sentencia        go to state 11
+    salida           go to state 12
+    entrada          go to state 13
+    asignacion       go to state 14
+    asignacion_mult  go to state 15
+    lista            go to state 16
+    iteracion        go to state 17
+    decision         go to state 18
+
+
+state 99
+
+   41 between: BETWEEN PA ID COMA . CA expresion PUNTO_COMA expresion CC PC
+
+    CA  shift, and go to state 102
+
+
+state 100
+
+   13 bloque: bloque . sentencia
+   31 iteracion: WHILE PA condicion PC LLA bloque . LLC
+
+    WHILE  shift, and go to state 2
+    IF     shift, and go to state 3
+    LLC    shift, and go to state 103
+    READ   shift, and go to state 4
+    WRITE  shift, and go to state 5
+    ID     shift, and go to state 6
+
+    sentencia        go to state 34
+    salida           go to state 12
+    entrada          go to state 13
+    asignacion       go to state 14
+    asignacion_mult  go to state 15
+    lista            go to state 16
+    iteracion        go to state 17
+    decision         go to state 18
+
+
+state 101
+
+   13 bloque: bloque . sentencia
+   32 decision: IF PA condicion PC LLA bloque . LLC
+   33         | IF PA condicion PC LLA bloque . LLC ELSE LLA bloque LLC
+
+    WHILE  shift, and go to state 2
+    IF     shift, and go to state 3
+    LLC    shift, and go to state 104
+    READ   shift, and go to state 4
+    WRITE  shift, and go to state 5
+    ID     shift, and go to state 6
+
+    sentencia        go to state 34
+    salida           go to state 12
+    entrada          go to state 13
+    asignacion       go to state 14
+    asignacion_mult  go to state 15
+    lista            go to state 16
+    iteracion        go to state 17
+    decision         go to state 18
+
+
+state 102
+
+   41 between: BETWEEN PA ID COMA CA . expresion PUNTO_COMA expresion CC PC
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    expresion  go to state 105
+    termino    go to state 51
+    factor     go to state 52
+
+
+state 103
+
+   31 iteracion: WHILE PA condicion PC LLA bloque LLC .
+
+    $default  reduce using rule 31 (iteracion)
+
+
+state 104
+
+   32 decision: IF PA condicion PC LLA bloque LLC .
+   33         | IF PA condicion PC LLA bloque LLC . ELSE LLA bloque LLC
+
+    ELSE  shift, and go to state 106
+
+    $default  reduce using rule 32 (decision)
+
+
+state 105
+
+   41 between: BETWEEN PA ID COMA CA expresion . PUNTO_COMA expresion CC PC
+   49 expresion: expresion . MENOS termino
+   50          | expresion . MAS termino
+
+    MAS         shift, and go to state 72
+    MENOS       shift, and go to state 73
+    PUNTO_COMA  shift, and go to state 107
+
+
+state 106
+
+   33 decision: IF PA condicion PC LLA bloque LLC ELSE . LLA bloque LLC
+
+    LLA  shift, and go to state 108
+
+
+state 107
+
+   41 between: BETWEEN PA ID COMA CA expresion PUNTO_COMA . expresion CC PC
+
+    MENOS      shift, and go to state 41
+    PA         shift, and go to state 43
+    ID         shift, and go to state 44
+    CTE_INT    shift, and go to state 45
+    CTE_FLOAT  shift, and go to state 46
+
+    expresion  go to state 109
+    termino    go to state 51
+    factor     go to state 52
+
+
+state 108
+
+   33 decision: IF PA condicion PC LLA bloque LLC ELSE LLA . bloque LLC
+
+    WHILE  shift, and go to state 2
+    IF     shift, and go to state 3
+    READ   shift, and go to state 4
+    WRITE  shift, and go to state 5
+    ID     shift, and go to state 6
+
+    bloque           go to state 110
+    sentencia        go to state 11
+    salida           go to state 12
+    entrada          go to state 13
+    asignacion       go to state 14
+    asignacion_mult  go to state 15
+    lista            go to state 16
+    iteracion        go to state 17
+    decision         go to state 18
+
+
+state 109
+
+   41 between: BETWEEN PA ID COMA CA expresion PUNTO_COMA expresion . CC PC
+   49 expresion: expresion . MENOS termino
+   50          | expresion . MAS termino
+
+    MAS    shift, and go to state 72
+    MENOS  shift, and go to state 73
+    CC     shift, and go to state 111
+
+
+state 110
+
+   13 bloque: bloque . sentencia
+   33 decision: IF PA condicion PC LLA bloque LLC ELSE LLA bloque . LLC
+
+    WHILE  shift, and go to state 2
+    IF     shift, and go to state 3
+    LLC    shift, and go to state 112
+    READ   shift, and go to state 4
+    WRITE  shift, and go to state 5
+    ID     shift, and go to state 6
+
+    sentencia        go to state 34
+    salida           go to state 12
+    entrada          go to state 13
+    asignacion       go to state 14
+    asignacion_mult  go to state 15
+    lista            go to state 16
+    iteracion        go to state 17
+    decision         go to state 18
+
+
+state 111
+
+   41 between: BETWEEN PA ID COMA CA expresion PUNTO_COMA expresion CC . PC
+
+    PC  shift, and go to state 113
+
+
+state 112
+
+   33 decision: IF PA condicion PC LLA bloque LLC ELSE LLA bloque LLC .
+
+    $default  reduce using rule 33 (decision)
+
+
+state 113
+
+   41 between: BETWEEN PA ID COMA CA expresion PUNTO_COMA expresion CC PC .
+
+    $default  reduce using rule 41 (between)

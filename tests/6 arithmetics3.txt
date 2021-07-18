@@ -1,0 +1,13 @@
+DECVAR
+i1, i2, i3 : INT
+f1, f2, f3 : FLOAT
+ENDDEC
+
+
+
+WRITE "Test float div int: da 2"
+f1 = 4,5
+i1 = 2
+i3 = f1 DIV i1
+WRITE i3
+

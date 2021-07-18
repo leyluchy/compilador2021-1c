@@ -1,0 +1,8 @@
+WRITE "Testeando IF por true"
+
+IF (1 < 2) {
+	WRITE "Dio true :)"
+} ELSE {
+	WRITE "Dio false :("
+}
+WRITE "Termino :)"

@@ -1,0 +1,9 @@
+DECVAR
+numero : INT
+ENDDEC
+
+WRITE "Testeando READ"
+
+READ numero
+WRITE "Ingresaste "
+WRITE numero

@@ -1,0 +1,16 @@
+DECVAR
+i1, i2, i3 : INT
+ENDDEC
+
+WRITE "Test asig mult cte: da dos 1"
+
+i1 = i2 = 1
+WRITE i1
+WRITE i2
+
+WRITE "Test asig mult var: da dos 2"
+
+i3 = 2
+i1 = i2 = i3
+WRITE i1
+WRITE i2

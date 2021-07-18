@@ -1,0 +1,13 @@
+DECVAR
+cont : INT
+ENDDEC
+
+WRITE "Testeando WHILE: entra 3 veces"
+
+cont := 1
+WHILE (cont <= 3) {
+	WRITE "Entro " -/Tiene que decir 1, 2 y 3/-
+	WRITE cont
+	cont := cont + 1
+}
+WRITE "Termino :)"

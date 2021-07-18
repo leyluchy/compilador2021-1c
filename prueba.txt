@@ -1,0 +1,45 @@
+DECVAR
+contador, modulo, division : INT
+promedio, actual, suma1, suma2, suma : FLOAT
+mensaje : STRING
+ENDDEC
+
+mensaje:= "Valor entero para actual: "
+
+WRITE mensaje
+
+READ actual
+contador:= 0
+suma:= 02.5 + 2.6
+WHILE (contador <= 9) {
+contador:= contador + 1 
+actual:= (contador/0.342)
+suma:= suma + actual
+} 
+
+WRITE "La suma es: " 
+WRITE suma
+
+suma2=suma3=suma
+
+modulo:= suma MOD contador
+WRITE "Resto entre suma y contador: "
+WRITE modulo
+
+division:= suma DIV contador
+WRITE "Div entre suma y contador: "
+WRITE division
+
+
+IF (actual > 10 && actual != 0){ 
+WRITE "Mayor que 10 y no es cero"
+} 
+ELSE 
+{
+IF (actual < 10) 
+{
+WRITE "no es mayor que 10"
+}
+} 
+
+-/esto es un comentario/-

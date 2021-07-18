@@ -1,0 +1,13 @@
+DECVAR
+i1, i2, i3 : INT
+f1, f2, f3 : FLOAT
+ENDDEC
+
+
+
+WRITE "Testeando aritmetica: da 4,5"
+
+f1 := 10
+f2 := 21
+f3 := f2 / 2 + 3*(2 - f1) MOD 10
+WRITE f3
