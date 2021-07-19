@@ -1,6 +1,4 @@
-   
-    
- ;number.asm
+;number.asm
 ;These are macros for use in Assembly Language Class.
 ;They are for integer and floating point input and output.
 ;They were written by Myron Berg at Dickinson State University
@@ -50,8 +48,3 @@ DisplayInteger            macro  number
 
 endm
 ;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  
-  
- 
-  
-  

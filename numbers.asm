@@ -1,6 +1,4 @@
-   
-    
- ;numbers.asm
+;numbers.asm
 ;This file was written by Myron Berg of Dickinson State University
 ;It is used for inputting and outputting numbers into an assembly language
 ;program.
@@ -696,8 +694,3 @@ atoi    endp
 
 
 end    begin
-  
-  
- 
-  
-  

@@ -1,6 +1,4 @@
-   
-    
- ;macros2.asm
+;macros2.asm
 ;These are macros for Assembly Language Programming
 ;Myron Berg
 ;Dickinson State University
@@ -243,4 +241,3 @@ LOCAL @@CICLO, @@NOTEQUAL, @@BYE
 @@BYE:
 	NOP
 ENDM 
-  
