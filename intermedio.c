@@ -4,7 +4,11 @@
 #include <stdarg.h>
 #include <string.h>
 #include <math.h>
-#define CADENA_MAXIMA 1024
+#define CADENA_MAXIMA 30
+#define MAX_TAM_POLACA 1024
+#define ERROR -1
+#define OK 0
+
 
 
 //Pila
@@ -27,39 +31,34 @@ typedef struct s_nodoPila{
 typedef t_nodoPila *t_pila;
 
 //Polaca
-typedef struct
-{
-	char cadena[CADENA_MAXIMA];
-	int nro;
-}t_infoPolaca;
+typedef struct{
+	char val[CADENA_MAXIMA];
 
-typedef struct s_nodoPolaca{
-	t_infoPolaca info;
-	struct s_nodoPolaca* psig;
-}t_nodoPolaca;
+}
+ nodoPolaca;
 
-typedef t_nodoPolaca *t_polaca;
+nodoPolaca polaca[MAX_TAM_POLACA];
 
+
+int writeIdxPolaca = 0;
+int readIdxPolaca = 0;
 ///////////////////// DECLARACION DE FUNCIONES /////////////////////
 int yyerrormsj(const char *,enum tipoDeError,enum error, const char*);
 int yyerror();
 
 //Funciones para notacion intermedia
-void guardarPolaca(t_polaca*);
-int ponerEnPolacaNro(t_polaca*,int, char *);
-int ponerEnPolaca(t_polaca*, char *);
-void crearPolaca(t_polaca*);
-char* obtenerSalto(enum tipoSalto);
-char* obtenerSalto2(char*,enum tipoSalto);
+void guardarPolaca();
+int PonerEnPolacaNro(int, char *);
+int PonerEnPolaca(char *);
+void CrearPolaca();
 //Funciones para manejo de pilas
 void vaciarPila(t_pila*);
 t_info* sacarDePila(t_pila*);
-void crearPila(t_pila*);
+t_pila* crearPila(t_pila*);
 int ponerEnPila(t_pila*,t_info*);
 t_info* topeDePila(t_pila*);
 
 //Notacion intermedia
-t_polaca polaca;
 t_pila pilaAVG;
 t_pila pilaIf;
 t_pila pilaWhile;
@@ -67,9 +66,10 @@ t_pila pilaASM;
 
 /////////////////Pila/////////////////////////////////////////////////////
 
-	void crearPila(t_pila* pp)
+	t_pila* crearPila()
 	{
-	    *pp=NULL;
+	    t_pila* pp = (t_pila*)malloc(sizeof(t_nodoPila));
+		return pp;
 	}
 
 	int ponerEnPila(t_pila* pp,t_info* info)
@@ -111,152 +111,128 @@ t_pila pilaASM;
 	}
 
 /////////////////POLACA/////////////////////////////////////////////////////
-void crearPolaca(t_polaca* pp)
+void CrearPolaca()
 {
-	*pp=NULL;
+	writeIdxPolaca = 0;	
+	readIdxPolaca= 0;
 }
 
-char * sacarDePolaca(t_polaca * pp){
-	t_nodoPolaca* nodo;
-	t_nodoPolaca* anterior;
-	char * cadena = (char*)malloc(sizeof(char)*CADENA_MAXIMA);;
-	nodo = *pp;
-
-	while(nodo->psig){
-		anterior = nodo;
-		nodo = nodo->psig;
-	}
-
-	anterior->psig=NULL;
-	strcpy(cadena, nodo->info.cadena);
-	free(nodo);
-	return cadena;
+char * PeekPolaca(){
+	char * res = (char*)malloc(sizeof(char)*CADENA_MAXIMA);
+	if(readIdxPolaca < 0 || readIdxPolaca>=MAX_TAM_POLACA || readIdxPolaca>=writeIdxPolaca)
+		return NULL;
+	strcpy(res, polaca[readIdxPolaca].val);	
+	return res;
 }
 
-int ponerEnPolaca(t_polaca* pp, char *cadena)
+char * SacarPolaca(){
+	char * res = PeekPolaca();
+	if(res == NULL) readIdxPolaca++;
+	return res;
+
+}
+int PonerEnPolaca( char *cadena)
 {
-	t_nodoPolaca* pn = (t_nodoPolaca*)malloc(sizeof(t_nodoPolaca));
-	if(!pn){
-		printf("ponerEnPolaca: Error al solicitar memoria (pn).\n");
+	if(writeIdxPolaca >= MAX_TAM_POLACA  ){
+		printf("ponerEnPolaca: #POL_FULL.\n");
+		return ERROR;
+	}	
+	if(strlen(cadena)>= CADENA_MAXIMA){
+		printf("ponerEnPolaca: #LONG_OP\n");
 		return ERROR;
 	}
-	t_nodoPolaca* aux;
-	strcpy(pn->info.cadena,cadena);
-	pn->info.nro=contadorPolaca++;
-	pn->psig=NULL;
-	if(!*pp){
-		*pp=pn;
-		return OK;
-	}
-	else{
-		aux=*pp;
-		while(aux->psig)
-			aux=aux->psig;
-		aux->psig=pn;
-		return OK;
-	}
+	strcpy(polaca[writeIdxPolaca].val, cadena);
+	writeIdxPolaca++;
+	return OK;
 }
 
-int ponerEnPolacaNro(t_polaca* pp,int pos, char *cadena)
+int PonerEnPolacaNro(int pos, char *cadena)
 {
-	t_nodoPolaca* aux;
-	aux=*pp;
-	while(aux!=NULL && aux->info.nro<pos){
-		aux=aux->psig;
-	}
-	if(aux->info.nro==pos){
-		strcpy(aux->info.cadena,cadena);
-		return OK;
-	}
-	else{
-		printf("NO ENCONTRADO\n");
-		return ERROR;
-	}
+	if(pos < 0 || pos >= MAX_TAM_POLACA||strlen(cadena)>CADENA_MAXIMA)
 	return ERROR;
+
+	strcopy(polaca[pos].val, cadena);
+	return OK;
 }
 
-void guardarPolaca(t_polaca *pp){
-	FILE*pt=fopen("intermedia.txt","w+");
-	t_nodoPolaca* pn;
-	if(!pt){
-		printf("Error al crear la tabla de simbolos\n");
+void guardarPolaca(){
+	FILE*fp=fopen("intermedia.txt","w+");
+	if(!fp){
+		printf("Error al crear intermedia.txt\n");
 		return;
 	}
-	while(*pp)
-	{
-		pn=*pp;
-		fprintf(pt, "%s\n",pn->info.cadena);
-		*pp=(*pp)->psig;
-		//TODO: Revisar si este free afecta al funcionamiento del compilador en W7
-		free(pn);
+	
+	int cont = 0;
+	while(cont < writeIdxPolaca){
+		fprintf(fp, "%s ", polaca[cont].val);
 	}
-	fclose(pt);
+	fclose(fp);
 }
 
-char* obtenerSalto(enum tipoSalto tipo){
-	switch(tipo){
-		case normal:
-			if(strcmp(ultimoComparador,"==")==0)
-				return("BEQ");
-			if(strcmp(ultimoComparador,">")==0)
-				return("BGT");
-			if(strcmp(ultimoComparador,"<")==0)
-				return("BLT");
-			if(strcmp(ultimoComparador,">=")==0)
-				return("BGE");
-			if(strcmp(ultimoComparador,"<=")==0)
-				return("BLE");
-			if(strcmp(ultimoComparador,"!=")==0)
-				return("BNE");
-			break;
+// char* obtenerSalto(enum tipoSalto tipo){
+// 	switch(tipo){
+// 		case normal:
+// 			if(strcmp(ultimoComparador,"==")==0)
+// 				return("BEQ");
+// 			if(strcmp(ultimoComparador,">")==0)
+// 				return("BGT");
+// 			if(strcmp(ultimoComparador,"<")==0)
+// 				return("BLT");
+// 			if(strcmp(ultimoComparador,">=")==0)
+// 				return("BGE");
+// 			if(strcmp(ultimoComparador,"<=")==0)
+// 				return("BLE");
+// 			if(strcmp(ultimoComparador,"!=")==0)
+// 				return("BNE");
+// 			break;
 
-		case inverso:
-			if(strcmp(ultimoComparador,"==")==0)
-				return("BNE");
-			if(strcmp(ultimoComparador,">")==0)
-				return("BLE");
-			if(strcmp(ultimoComparador,"<")==0)
-				return("BGE");
-			if(strcmp(ultimoComparador,">=")==0)
-				return("BLT");
-			if(strcmp(ultimoComparador,"<=")==0)
-				return("BGT");
-			if(strcmp(ultimoComparador,"!=")==0)
-				return("BEQ");
-			break;
-	}
-}
+// 		case inverso:
+// 			if(strcmp(ultimoComparador,"==")==0)
+// 				return("BNE");
+// 			if(strcmp(ultimoComparador,">")==0)
+// 				return("BLE");
+// 			if(strcmp(ultimoComparador,"<")==0)
+// 				return("BGE");
+// 			if(strcmp(ultimoComparador,">=")==0)
+// 				return("BLT");
+// 			if(strcmp(ultimoComparador,"<=")==0)
+// 				return("BGT");
+// 			if(strcmp(ultimoComparador,"!=")==0)
+// 				return("BEQ");
+// 			break;
+// 	}
+// }
 
-char* obtenerSalto2(char* comparador,enum tipoSalto tipo){
-	switch(tipo){
-		case normal:
-			if(strcmp(comparador,"==")==0)
-				return("BEQ");
-			if(strcmp(comparador,">")==0)
-				return("BGT");
-			if(strcmp(comparador,"<")==0)
-				return("BLT");
-			if(strcmp(comparador,">=")==0)
-				return("BGE");
-			if(strcmp(comparador,"<=")==0)
-				return("BLE");
-			if(strcmp(comparador,"!=")==0)
-				return("BNE");
-			break;
+// char* obtenerSalto2(char* comparador,enum tipoSalto tipo){
+// 	switch(tipo){
+// 		case normal:
+// 			if(strcmp(comparador,"==")==0)
+// 				return("BEQ");
+// 			if(strcmp(comparador,">")==0)
+// 				return("BGT");
+// 			if(strcmp(comparador,"<")==0)
+// 				return("BLT");
+// 			if(strcmp(comparador,">=")==0)
+// 				return("BGE");
+// 			if(strcmp(comparador,"<=")==0)
+// 				return("BLE");
+// 			if(strcmp(comparador,"!=")==0)
+// 				return("BNE");
+// 			break;
 
-		case inverso:
-			if(strcmp(comparador,"==")==0)
-				return("BNE");
-			if(strcmp(comparador,">")==0)
-				return("BLE");
-			if(strcmp(comparador,"<")==0)
-				return("BGE");
-			if(strcmp(comparador,">=")==0)
-				return("BLT");
-			if(strcmp(comparador,"<=")==0)
-				return("BGT");
-			if(strcmp(comparador,"!=")==0)
-				return("BEQ");
-			break;
-	}
-}
+// 		case inverso:
+// 			if(strcmp(comparador,"==")==0)
+// 				return("BNE");
+// 			if(strcmp(comparador,">")==0)
+// 				return("BLE");
+// 			if(strcmp(comparador,"<")==0)
+// 				return("BGE");
+// 			if(strcmp(comparador,">=")==0)
+// 				return("BLT");
+// 			if(strcmp(comparador,"<=")==0)
+// 				return("BGT");
+// 			if(strcmp(comparador,"!=")==0)
+// 				return("BEQ");
+// 			break;
+// 	}
+// }

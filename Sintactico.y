@@ -6,7 +6,7 @@
 #include <string.h>
 #include "y.tab.h"
 #include "funciones.c"
-//#include "intermedio.c"
+#include "intermedio.c"
 
 FILE  *yyin;
 
@@ -305,6 +305,7 @@ int main(int argc,char *argv[])
     crearTabla();
     yyparse();
     guardar_ts();
+    crearPolaca();
     freeArray(&array_nombres_variables);
   }
   fclose(yyin);
