@@ -9,7 +9,8 @@
 #include "intermedio.c"
 
 FILE  *yyin;
-
+int yylex();
+void yyerror(const char *s);
 //t_polaca Polaca;
 //t_pila PilaIf;
 //t_pila PilaWhile;
@@ -84,7 +85,7 @@ FILE  *yyin;
 
  /* Identificadores y constantes */
 %token ID
-%token CTE_INT
+%token CTE_INT  
 %token CTE_FLOAT
 %token CTE_STRING
 
@@ -120,27 +121,27 @@ declaracion:
 	  ;
 
 tipo_variable:
-      INT
-	  {
+      INT 
+	    {
         strcpy(tipo_dato,$<str_val>1);
       }
       |FLOAT
-	  {
+	    {
         strcpy(tipo_dato,$<str_val>1);
       }
       |STRING
-	  {
+	    {
         strcpy(tipo_dato,$<str_val>1);
       }
 	  ;
 
 lista_id:
       lista_id COMA ID
-	  {
+	    {
         insertArray(&array_nombres_variables,$<str_val>3);
       }
       | ID
-	  {
+	    {
         insertArray(&array_nombres_variables,$<str_val>1);
       }
 	  ;
@@ -161,24 +162,30 @@ sentencia:
 
 salida:
       WRITE CTE_INT
-	  {
+	    {
             char* aux = guardar_cte_int($<int_val>2);
+            PonerEnPolaca(aux);
+
       }
       |WRITE CTE_FLOAT
-	  {
-			char* aux = guardar_cte_float($<real_val>2);
-	  }
+	    {
+			  char* aux = guardar_cte_float($<real_val>2);
+            PonerEnPolaca(aux);
+
+	    }
       |WRITE CTE_STRING
-	  {
+	    {
             char* nombre_cte_string = guardar_cte_string($<str_val>2);
+            PonerEnPolaca(nombre_cte_string);
+
       }
       |WRITE ID
-	  {
+	    {
 			if(!existe_simbolo($<str_val>2)){
                   printf("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",$<str_val>2);
-                  yyerror();
+                  yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
 			}
-	  }		  
+	    }		  
 	  ;
 
 entrada:
@@ -230,11 +237,29 @@ between:
 
 comparador:
       MAYOR
-      |MAYOR_IGUAL
-      |MENOR_IGUAL
-      |MENOR
-      |IGUAL
-      |DISTINTO
+      {
+		    PonerEnPolaca("MAYOR");
+	    }
+      |MAYOR_IGUAL      
+      {
+		    PonerEnPolaca("MAYOR_IGUAL");
+	    }
+      |MENOR_IGUAL      
+      {
+		    PonerEnPolaca("MENOR_IGUAL");
+	    }
+      |MENOR      
+      {
+		    PonerEnPolaca("MENOR");
+	    }
+      |IGUAL      
+      {
+		    PonerEnPolaca("IGUAL");
+	    }
+      |DISTINTO      
+      {
+		    PonerEnPolaca("DISTINTO");
+	    }
 	  ;
 
 		
@@ -242,11 +267,11 @@ expresion:
       termino
       |expresion MENOS termino
 	  {
-		//ponerEnPolaca(&Polaca,"MENOS");
+		  PonerEnPolaca("MENOS");
 	  }
       |expresion MAS termino
 	  {
-		//ponerEnPolaca(&Polaca,"MAS");
+		  PonerEnPolaca("MAS");
 	  }
 	  ;
 
@@ -254,19 +279,19 @@ termino:
       factor
       |termino POR factor
 	  {
-		//ponerEnPolaca(&Polaca,"POR");
+		  PonerEnPolaca("POR");
 	  }
       |termino DIVIDIDO factor
 	  {
-		//ponerEnPolaca(&Polaca,"DIVIDIDO");
+		  PonerEnPolaca("DIVIDIDO");
 	  }
 	  |termino DIV factor
 	  {
-		//ponerEnPolaca(&Polaca,"DIV");
+		  PonerEnPolaca("DIV");
 	  }
 	  |termino MOD factor
 	  {
-		//ponerEnPolaca(&Polaca,"MOD");
+		  PonerEnPolaca("MOD");
 	  }
 	  ;
 
@@ -274,21 +299,28 @@ factor:
       ID
       |CTE_INT 
 	  {
-		char* nombre_cte_int = guardar_cte_int($<int_val>1);
+      char* nombre_cte_int = (char*)guardar_cte_int($<int_val>1);
+      PonerEnPolaca(nombre_cte_int);
 	  }
 	  |MENOS CTE_INT 
 	  {
-		char* nombre_cte_int = guardar_cte_int($<int_val>2);
+      char* nombre_cte_int = (char*)guardar_cte_int($<int_val>2);
+      PonerEnPolaca(nombre_cte_int);
+
 	  }
       |CTE_FLOAT
 	  {
-		float valor = $<real_val>1;
-        char* nombre_cte_float = guardar_cte_float(valor);
+      float valor = $<real_val>1;
+      char* nombre_cte_float = (char*)guardar_cte_float(valor);
+      PonerEnPolaca(nombre_cte_float);
+
 	  }
 	  |MENOS CTE_FLOAT
 	  {
-		float valor = $<real_val>2;
-        char* nombre_cte_float = guardar_cte_float(valor);
+      float valor = $<real_val>2;
+      char* nombre_cte_float = (char*)guardar_cte_float(valor);
+      PonerEnPolaca(nombre_cte_float);
+
 	  }
       |PA expresion PC
 	  ;
@@ -304,9 +336,12 @@ int main(int argc,char *argv[])
     crearTabla();
     yyparse();
     guardar_ts();
-    crearPolaca();
+    CrearPolaca();
     freeArray(&array_nombres_variables);
   }
   fclose(yyin);
   return 0;
 }
+void yyerror (char const *s) {
+   fprintf (stderr, "%s\n", s);
+ }

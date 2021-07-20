@@ -16,11 +16,6 @@ typedef struct
 {
 	char *cadena;
 	int cantExpresiones;
-	int salto1;
-	int salto2;
-	int nro;
-	enum and_or andOr;
-	enum tipoDato tipo;
 }t_info;
 
 typedef struct s_nodoPila{
@@ -43,8 +38,8 @@ nodoPolaca polaca[MAX_TAM_POLACA];
 int writeIdxPolaca = 0;
 int readIdxPolaca = 0;
 ///////////////////// DECLARACION DE FUNCIONES /////////////////////
-int yyerrormsj(const char *,enum tipoDeError,enum error, const char*);
-int yyerror();
+// int yyerrormsj(const char *,enum tipoDeError,enum error, const char*);
+//int yyerror();
 
 //Funciones para notacion intermedia
 void guardarPolaca();
@@ -52,9 +47,9 @@ int PonerEnPolacaNro(int, char *);
 int PonerEnPolaca(char *);
 void CrearPolaca();
 //Funciones para manejo de pilas
-void vaciarPila(t_pila*);
+void vaciarPila();
 t_info* sacarDePila(t_pila*);
-t_pila* crearPila(t_pila*);
+t_pila* crearPila();
 int ponerEnPila(t_pila*,t_info*);
 t_info* topeDePila(t_pila*);
 
@@ -133,6 +128,8 @@ char * SacarPolaca(){
 }
 int PonerEnPolaca( char *cadena)
 {
+	printf(cadena);
+	printf(" ");
 	if(writeIdxPolaca >= MAX_TAM_POLACA  ){
 		printf("ponerEnPolaca: #POL_FULL.\n");
 		return ERROR;
@@ -151,7 +148,7 @@ int PonerEnPolacaNro(int pos, char *cadena)
 	if(pos < 0 || pos >= MAX_TAM_POLACA||strlen(cadena)>CADENA_MAXIMA)
 	return ERROR;
 
-	strcopy(polaca[pos].val, cadena);
+	strcpy(polaca[pos].val, cadena);
 	return OK;
 }
 

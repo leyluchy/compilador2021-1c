@@ -124,8 +124,14 @@ ESPACIO     " "|\t
 {ESPACIO}
 \n
 \t
-.	{	printf("Token no reconocido: %s\n",yytext);
-		yyerror();};
+.	{	
+		char msg[] = "Token no reconocido: %s\n";
+		//yyerror(msg);
+		printf("Syntax Error (linea %d): %s\n", yylineno, msg);
+		system ("Pause");
+		exit (1);
+		
+	};
 %%
 
 int cota_error(char* mensaje)
@@ -135,8 +141,6 @@ int cota_error(char* mensaje)
 	exit (1);
 }
 
-int yyerror(char * mensaje){
-  	printf("Syntax Error (linea %d): %s\n", yylineno, mensaje);
-	system ("Pause");
-	exit (1);
-}
+//int yyerror(char * mensaje){
+//  	
+//}
