@@ -1,20 +1,21 @@
 
 %{
-#include <stdio.h>
-#include <stdlib.h>
-#include <conio.h>
-#include <string.h>
-#include "y.tab.h"
-#include "funciones.c"
-//#include "intermedio.c"
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <conio.h>
+  #include <string.h>
+  #include "y.tab.h"
+  #include "funciones.c"
+  //#include "intermedio.c"
+  #include "assembler.h"
 
-FILE  *yyin;
+  FILE  *yyin;
 
-//t_polaca Polaca;
-//t_pila PilaIf;
-//t_pila PilaWhile;
-//int IDXAsignacionMultiple;
-//int ContadorPolaca;
+  //t_polaca Polaca;
+  //t_pila PilaIf;
+  //t_pila PilaWhile;
+  //int IDXAsignacionMultiple;
+  //int ContadorPolaca;
 
 %}
 
@@ -92,7 +93,12 @@ FILE  *yyin;
 %%
 
 start: 
-	  programa {printf("COMPILACION CORRECTA\n");}
+	  programa {
+      // Guardar tabla simbolos
+      // Guardar polaca
+      generarAssembler();
+      printf("COMPILACION CORRECTA\n");
+    }
 	  ;
 
 programa: 
