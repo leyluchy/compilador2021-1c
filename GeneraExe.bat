@@ -4,7 +4,7 @@ flex Lexico.l
 ::pause
 bison Sintactico.y
 ::pause
-gcc.exe lex.yy.c y.tab.c assembler.c -o TPFinal.exe
+gcc lex.yy.c y.tab.c assembler.c -o TPFinal.exe -std=c99 -w
 pause
 TPFinal.exe prueba.txt
 TPFinal.exe "./tests/1 write cte.txt"
