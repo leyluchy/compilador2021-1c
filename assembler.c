@@ -1,5 +1,9 @@
 #include "assembler.h"
+#include "globales.h"
 #include <stdio.h>
+
+extern simbolo ts[TAM_TABLA];
+extern cant_elem_ts;
 
 void generarAssembler(){
     FILE* arch = fopen("Final.asm", "w");
@@ -36,6 +40,22 @@ void generarTabla(FILE *arch){
 	fprintf(arch, "CWprevio DW ?\n");
 
     // TODO: escribir tabla de simbolos
+    for(int i = 0; i < cant_elem_ts; i++){
+        fprintf(arch, "%s ", ts[i].nombre);
+        switch(ts[i].tipo_dato){
+        case TIPO_INT:
+            fprintf(arch, "dd %s\n", ts[i].valor);
+            break;
+        case TIPO_FLOAT:
+            fprintf(arch, "dd %s\n", ts[i].valor);
+            break;
+        case TIPO_STRING:
+            fprintf(arch, "db \"%s\", '$'\n", ts[i].valor);
+            break;
+        default: //Es una variable int, float o puntero a string
+            fprintf(arch, "dd ?\n");
+        }
+    }
 
     fprintf(arch, "\n");
 }

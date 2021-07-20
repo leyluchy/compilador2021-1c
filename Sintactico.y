@@ -5,6 +5,8 @@
   #include <conio.h>
   #include <string.h>
   #include "y.tab.h"
+
+  #include "globales.h"
   #include "funciones.c"
   //#include "intermedio.c"
   #include "assembler.h"
@@ -127,16 +129,16 @@ declaracion:
 
 tipo_variable:
       INT
-	  {
-        strcpy(tipo_dato,$<str_val>1);
+	    {
+        tipo_dato = TIPO_INT;
       }
       |FLOAT
-	  {
-        strcpy(tipo_dato,$<str_val>1);
+	    {
+        tipo_dato = TIPO_FLOAT;
       }
       |STRING
-	  {
-        strcpy(tipo_dato,$<str_val>1);
+	    {
+        tipo_dato = TIPO_STRING;
       }
 	  ;
 
