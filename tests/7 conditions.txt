@@ -33,7 +33,3 @@ IF (1 < 2 && 2 < 3) {
 IF (1 > 2 || 2 < 3) {
 	WRITE "OR funciona :)"	
 }
-
-IF ((1!= 1 && 2 != 2) || 1 == 1) {
-	WRITE "() funciona :)"	
-}

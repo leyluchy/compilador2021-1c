@@ -18,7 +18,6 @@ FILE  *yyin;
 
 %}
 
-
 %union {
       int int_val;
       float real_val;
@@ -311,10 +310,3 @@ int main(int argc,char *argv[])
   fclose(yyin);
   return 0;
 }
-int yyerror(void){
-  printf("Syntax Error\n");
-  system ("Pause");
-  exit (1);
-}
-
-
