@@ -43,13 +43,13 @@ void generarTabla(FILE *arch){
     for(int i = 0; i < cant_elem_ts; i++){
         fprintf(arch, "%s ", ts[i].nombre);
         switch(ts[i].tipo_dato){
-        case TIPO_INT:
+        case TIPO_CTE_INT:
             fprintf(arch, "dd %s\n", ts[i].valor);
             break;
-        case TIPO_FLOAT:
+        case TIPO_CTE_FLOAT:
             fprintf(arch, "dd %s\n", ts[i].valor);
             break;
-        case TIPO_STRING:
+        case TIPO_CTE_STRING:
             fprintf(arch, "db \"%s\", '$'\n", ts[i].valor);
             break;
         default: //Es una variable int, float o puntero a string

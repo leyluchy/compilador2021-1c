@@ -75,6 +75,12 @@ char* nombreTipo(int tipo){
       return "FLOAT";
     case TIPO_STRING:
       return "STRING";
+    case TIPO_CTE_INT:
+      return "CTE_INT";
+    case TIPO_CTE_FLOAT:
+      return "CTE_FLOAT";
+    case TIPO_CTE_STRING:
+      return "CTE_STRING";
     return "SIN_TIPO";
   }
 }
@@ -94,7 +100,7 @@ char* guardar_cte_int(int valor) {
       if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
         strcpy(ts[cant_elem_ts].nombre,nombre_constante);
         ts[cant_elem_ts].longitud = 0;
-        ts[cant_elem_ts].tipo_dato = TIPO_INT;
+        ts[cant_elem_ts].tipo_dato = TIPO_CTE_INT;
         strcpy(ts[cant_elem_ts].valor,constante_string);
         cant_elem_ts++;
       }
@@ -109,7 +115,7 @@ char* guardar_cte_string(char * valor) {
       if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
         strcpy(ts[cant_elem_ts].nombre,nombre_constante);
         ts[cant_elem_ts].longitud = strlen(nombre_constante);
-        ts[cant_elem_ts].tipo_dato = TIPO_STRING;
+        ts[cant_elem_ts].tipo_dato = TIPO_CTE_STRING;
         strcpy(ts[cant_elem_ts].valor,valor);
         cant_elem_ts++;
         contadorCteString++;
@@ -127,7 +133,7 @@ char* guardar_cte_float(float valor) {
       if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
         strcpy(ts[cant_elem_ts].nombre,nombre_constante);
         ts[cant_elem_ts].longitud = 0;
-        ts[cant_elem_ts].tipo_dato = TIPO_FLOAT;
+        ts[cant_elem_ts].tipo_dato = TIPO_CTE_FLOAT;
         strcpy(ts[cant_elem_ts].valor,constante_string);
         cant_elem_ts++; 
       }
