@@ -26,3 +26,4 @@ del Sintactico.tab.c
 del y.tab.h
 del TPFinal.exe
 del Final.asm
+del ts.txt
