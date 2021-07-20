@@ -114,7 +114,7 @@ char* guardar_cte_string(char * valor) {
       strcpy(returnValue, nombre_constante);
       if(existe_simbolo(nombre_constante) == FALSE && cant_elem_ts <= TAM_TABLA){
         strcpy(ts[cant_elem_ts].nombre,nombre_constante);
-        ts[cant_elem_ts].longitud = strlen(nombre_constante);
+        ts[cant_elem_ts].longitud = strlen(valor);
         ts[cant_elem_ts].tipo_dato = TIPO_CTE_STRING;
         strcpy(ts[cant_elem_ts].valor,valor);
         cant_elem_ts++;
