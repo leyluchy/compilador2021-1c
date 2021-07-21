@@ -70,29 +70,31 @@
 /* Line 189 of yacc.c  */
 #line 2 "Sintactico.y"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <conio.h>
-#include <string.h>
-#include "globales.h"
-#include "y.tab.h"
-#include "funciones.c"
-#include "intermedio.c"
-#include "assembler.h"
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <conio.h>
+      #include <string.h>
+      #include "globales.h"
+      #include "y.tab.h"
+      #include "funciones.c"
+      #include "intermedio.c"
+      #include "assembler.h"
 
-FILE  *yyin;
-int yylex();
-void yyerror(const char *s);
-//t_polaca Polaca;
-//t_pila PilaIf;
-//t_pila PilaWhile;
-//int IDXAsignacionMultiple;
-//int ContadorPolaca;
+      FILE  *yyin;
+      int yylex();
+      void yyerror(const char *s);
+      
+      t_pila* pila;
+      //t_polaca Polaca;
+      //t_pila PilaIf;
+      //t_pila PilaWhile;
+      //int IDXAsignacionMultiple;
+      //int ContadorPolaca;
 
 
 
 /* Line 189 of yacc.c  */
-#line 96 "Sintactico.tab.c"
+#line 98 "Sintactico.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -175,7 +177,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 24 "Sintactico.y"
+#line 26 "Sintactico.y"
 
       int int_val;
       float real_val;
@@ -184,7 +186,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 188 "Sintactico.tab.c"
+#line 190 "Sintactico.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -196,7 +198,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 200 "Sintactico.tab.c"
+#line 202 "Sintactico.tab.c"
 
 #ifdef short
 # undef short
@@ -508,13 +510,13 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    98,    98,   108,   109,   113,   117,   118,   122,   131,
-     135,   139,   146,   150,   157,   158,   162,   163,   164,   165,
-     166,   167,   171,   177,   183,   189,   199,   203,   204,   211,
-     215,   216,   220,   224,   225,   229,   230,   231,   232,   233,
-     237,   238,   242,   246,   250,   254,   258,   262,   266,   274,
-     275,   279,   286,   287,   291,   295,   299,   306,   307,   312,
-     318,   325,   332
+       0,   100,   100,   110,   111,   115,   119,   120,   124,   133,
+     137,   141,   148,   152,   159,   160,   164,   165,   166,   167,
+     168,   169,   173,   180,   188,   196,   208,   219,   222,   231,
+     237,   238,   242,   246,   247,   251,   252,   253,   254,   255,
+     259,   262,   266,   270,   274,   279,   285,   291,   297,   307,
+     308,   312,   319,   320,   324,   328,   332,   339,   344,   349,
+     355,   362,   369
 };
 #endif
 
@@ -1498,7 +1500,7 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 98 "Sintactico.y"
+#line 100 "Sintactico.y"
     {
       // Guardar tabla simbolos
       // Guardar polaca
@@ -1510,7 +1512,7 @@ yyreduce:
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 123 "Sintactico.y"
+#line 125 "Sintactico.y"
     {
         guardar_variables_ts();
         freeArray(&array_nombres_variables);
@@ -1521,7 +1523,7 @@ yyreduce:
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 132 "Sintactico.y"
+#line 134 "Sintactico.y"
     {
         tipo_dato = TIPO_INT;
       ;}
@@ -1530,7 +1532,7 @@ yyreduce:
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 136 "Sintactico.y"
+#line 138 "Sintactico.y"
     {
         tipo_dato = TIPO_FLOAT;
       ;}
@@ -1539,7 +1541,7 @@ yyreduce:
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 140 "Sintactico.y"
+#line 142 "Sintactico.y"
     {
         tipo_dato = TIPO_STRING;
       ;}
@@ -1548,7 +1550,7 @@ yyreduce:
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 147 "Sintactico.y"
+#line 149 "Sintactico.y"
     {
         insertArray(&array_nombres_variables,(yyvsp[(3) - (3)].str_val));
       ;}
@@ -1557,7 +1559,7 @@ yyreduce:
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 151 "Sintactico.y"
+#line 153 "Sintactico.y"
     {
         insertArray(&array_nombres_variables,(yyvsp[(1) - (1)].str_val));
       ;}
@@ -1566,10 +1568,11 @@ yyreduce:
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 172 "Sintactico.y"
+#line 174 "Sintactico.y"
     {
             char* aux = guardar_cte_int((yyvsp[(2) - (2)].int_val));
             PonerEnPolaca(aux);
+            PonerEnPolaca("WRITE");
 
       ;}
     break;
@@ -1577,10 +1580,12 @@ yyreduce:
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 178 "Sintactico.y"
+#line 181 "Sintactico.y"
     {
 			  char* aux = guardar_cte_float((yyvsp[(2) - (2)].real_val));
             PonerEnPolaca(aux);
+            PonerEnPolaca("WRITE");
+
 
 	    ;}
     break;
@@ -1588,10 +1593,12 @@ yyreduce:
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 184 "Sintactico.y"
+#line 189 "Sintactico.y"
     {
             char* nombre_cte_string = guardar_cte_string((yyvsp[(2) - (2)].str_val));
             PonerEnPolaca(nombre_cte_string);
+            PonerEnPolaca("WRITE");
+
 
       ;}
     break;
@@ -1599,82 +1606,136 @@ yyreduce:
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 190 "Sintactico.y"
+#line 197 "Sintactico.y"
     {
 			if(!existe_simbolo((yyvsp[(2) - (2)].str_val))){
-                  printf("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",(yyvsp[(2) - (2)].str_val));
-                  yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
+                        printf("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",(yyvsp[(2) - (2)].str_val));
+                        yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
 			}
+                  PonerEnPolaca((yyvsp[(2) - (2)].str_val));
+                  PonerEnPolaca("WRITE");
 	    ;}
+    break;
+
+  case 26:
+
+/* Line 1455 of yacc.c  */
+#line 208 "Sintactico.y"
+    {
+            if(!existe_simbolo((yyvsp[(2) - (2)].str_val))){
+                        printf("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",(yyvsp[(2) - (2)].str_val));
+                        yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
+			}
+                  PonerEnPolaca((yyvsp[(2) - (2)].str_val));
+                  PonerEnPolaca("READ");
+      ;}
+    break;
+
+  case 27:
+
+/* Line 1455 of yacc.c  */
+#line 219 "Sintactico.y"
+    {
+            PonerEnPolaca("ASIG");
+      ;}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 205 "Sintactico.y"
+#line 223 "Sintactico.y"
     {
+            PonerEnPolaca("ASIG");
+              
 			char * nombre_cte_string = guardar_cte_string((yyvsp[(3) - (3)].str_val));
 	  ;}
+    break;
+
+  case 29:
+
+/* Line 1455 of yacc.c  */
+#line 231 "Sintactico.y"
+    {
+              PonerEnPolaca("ASIGMULT");
+        ;}
+    break;
+
+  case 40:
+
+/* Line 1455 of yacc.c  */
+#line 259 "Sintactico.y"
+    {
+            PonerEnPolaca(sacarDePila(pila)->cadena);
+      ;}
     break;
 
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 247 "Sintactico.y"
+#line 271 "Sintactico.y"
     {
-		    PonerEnPolaca("MAYOR");
+                  PonerStringEnPila(pila,  "MAYOR");
 	    ;}
     break;
 
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 251 "Sintactico.y"
+#line 275 "Sintactico.y"
     {
-		    PonerEnPolaca("MAYOR_IGUAL");
+                  PonerStringEnPila(pila,  "MAYOR_IGUAL");
+		    //PonerEnPolaca("MAYOR_IGUAL");
 	    ;}
     break;
 
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 255 "Sintactico.y"
+#line 280 "Sintactico.y"
     {
-		    PonerEnPolaca("MENOR_IGUAL");
+                  PonerStringEnPila(pila,  "MENOR_IGUAL");
+
+		   // PonerEnPolaca("MENOR_IGUAL");
 	    ;}
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 259 "Sintactico.y"
+#line 286 "Sintactico.y"
     {
-		    PonerEnPolaca("MENOR");
+                  PonerStringEnPila(pila,  "MENOR");
+
+		    //PonerEnPolaca("MENOR");
 	    ;}
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 263 "Sintactico.y"
+#line 292 "Sintactico.y"
     {
-		    PonerEnPolaca("IGUAL");
+                  PonerStringEnPila(pila,  "IGUAL");
+            
+		    //PonerEnPolaca("IGUAL");
 	    ;}
     break;
 
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 267 "Sintactico.y"
+#line 298 "Sintactico.y"
     {
-		    PonerEnPolaca("DISTINTO");
+                  PonerStringEnPila(pila,  "DISTINTO");
+
+		    //PonerEnPolaca("DISTINTO");
 	    ;}
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 276 "Sintactico.y"
+#line 309 "Sintactico.y"
     {
 		  PonerEnPolaca("MENOS");
 	  ;}
@@ -1683,7 +1744,7 @@ yyreduce:
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 280 "Sintactico.y"
+#line 313 "Sintactico.y"
     {
 		  PonerEnPolaca("MAS");
 	  ;}
@@ -1692,7 +1753,7 @@ yyreduce:
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 288 "Sintactico.y"
+#line 321 "Sintactico.y"
     {
 		  PonerEnPolaca("POR");
 	  ;}
@@ -1701,7 +1762,7 @@ yyreduce:
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 292 "Sintactico.y"
+#line 325 "Sintactico.y"
     {
 		  PonerEnPolaca("DIVIDIDO");
 	  ;}
@@ -1710,7 +1771,7 @@ yyreduce:
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 296 "Sintactico.y"
+#line 329 "Sintactico.y"
     {
 		  PonerEnPolaca("DIV");
 	  ;}
@@ -1719,16 +1780,27 @@ yyreduce:
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 300 "Sintactico.y"
+#line 333 "Sintactico.y"
     {
 		  PonerEnPolaca("MOD");
 	  ;}
     break;
 
+  case 57:
+
+/* Line 1455 of yacc.c  */
+#line 339 "Sintactico.y"
+    {
+            char * nombre_var = (char*)(yyvsp[(1) - (1)].str_val);
+            PonerEnPolaca(nombre_var);
+            
+      ;}
+    break;
+
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 308 "Sintactico.y"
+#line 345 "Sintactico.y"
     {
       char* nombre_cte_int = (char*)guardar_cte_int((yyvsp[(1) - (1)].int_val));
       PonerEnPolaca(nombre_cte_int);
@@ -1738,7 +1810,7 @@ yyreduce:
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 313 "Sintactico.y"
+#line 350 "Sintactico.y"
     {
       char* nombre_cte_int = (char*)guardar_cte_int((yyvsp[(2) - (2)].int_val));
       PonerEnPolaca(nombre_cte_int);
@@ -1749,7 +1821,7 @@ yyreduce:
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 319 "Sintactico.y"
+#line 356 "Sintactico.y"
     {
       float valor = (yyvsp[(1) - (1)].real_val);
       char* nombre_cte_float = (char*)guardar_cte_float(valor);
@@ -1761,7 +1833,7 @@ yyreduce:
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 326 "Sintactico.y"
+#line 363 "Sintactico.y"
     {
       float valor = (yyvsp[(2) - (2)].real_val);
       char* nombre_cte_float = (char*)guardar_cte_float(valor);
@@ -1773,7 +1845,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 1777 "Sintactico.tab.c"
+#line 1849 "Sintactico.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1985,7 +2057,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 335 "Sintactico.y"
+#line 372 "Sintactico.y"
 
 int main(int argc,char *argv[])
 {
@@ -1997,6 +2069,7 @@ int main(int argc,char *argv[])
     crearTabla();
     yyparse();
     guardar_ts();
+    pila = crearPila();
     CrearPolaca();
     freeArray(&array_nombres_variables);
   }

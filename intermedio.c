@@ -104,6 +104,13 @@ t_pila pilaASM;
 	t_info* topeDePila(t_pila* pila){
 		return &((*pila)->info);
 	}
+                  
+	int PonerStringEnPila(t_pila* pp,char * str)
+	{
+		t_info info;
+		info.cadena = str;
+	    return ponerEnPila(pp, &info);
+	}
 
 /////////////////POLACA/////////////////////////////////////////////////////
 void CrearPolaca()

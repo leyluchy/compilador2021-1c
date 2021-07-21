@@ -13,6 +13,8 @@
       FILE  *yyin;
       int yylex();
       void yyerror(const char *s);
+      
+      t_pila* pila;
       //t_polaca Polaca;
       //t_pila PilaIf;
       //t_pila PilaWhile;
@@ -172,14 +174,14 @@ salida:
 	    {
             char* aux = guardar_cte_int($<int_val>2);
             PonerEnPolaca(aux);
-            PonerEnPolaca(WRITE);
+            PonerEnPolaca("WRITE");
 
       }
       |WRITE CTE_FLOAT
 	    {
 			  char* aux = guardar_cte_float($<real_val>2);
             PonerEnPolaca(aux);
-            PonerEnPolaca(WRITE);
+            PonerEnPolaca("WRITE");
 
 
 	    }
@@ -187,7 +189,7 @@ salida:
 	    {
             char* nombre_cte_string = guardar_cte_string($<str_val>2);
             PonerEnPolaca(nombre_cte_string);
-            PonerEnPolaca(WRITE);
+            PonerEnPolaca("WRITE");
 
 
       }
@@ -198,7 +200,7 @@ salida:
                         yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
 			}
                   PonerEnPolaca($<str_val>2);
-                  PonerEnPolaca(WRITE);
+                  PonerEnPolaca("WRITE");
 	    }		  
 	  ;
 
@@ -209,20 +211,26 @@ entrada:
                         yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
 			}
                   PonerEnPolaca($<str_val>2);
-                  PonerEnPolaca(READ);
+                  PonerEnPolaca("READ");
       }
 	  ;
 
 asignacion: 
-      ID ASIG expresion
+      ID ASIG expresion{
+            PonerEnPolaca("ASIG");
+      }
       |ID ASIG CTE_STRING
 	  {
+            PonerEnPolaca("ASIG");
+              
 			char * nombre_cte_string = guardar_cte_string($<str_val>3);
 	  }
 	  ;
 	  
 asignacion_mult:
-	  lista ASIGMULT expresion
+	  lista ASIGMULT expresion{
+              PonerEnPolaca("ASIGMULT");
+        }
 	  ;
 
 lista:
@@ -248,7 +256,9 @@ condicion:
 	  ;
 
 comparacion: 
-      expresion comparador expresion
+      expresion comparador expresion{
+            PonerEnPolaca(sacarDePila(pila)->cadena);
+      }
       |expresion
 	  ;
 
@@ -259,27 +269,36 @@ between:
 comparador:
       MAYOR
       {
-		    PonerEnPolaca("MAYOR");
+                  PonerStringEnPila(pila,  "MAYOR");
 	    }
       |MAYOR_IGUAL      
       {
-		    PonerEnPolaca("MAYOR_IGUAL");
+                  PonerStringEnPila(pila,  "MAYOR_IGUAL");
+		    //PonerEnPolaca("MAYOR_IGUAL");
 	    }
       |MENOR_IGUAL      
       {
-		    PonerEnPolaca("MENOR_IGUAL");
+                  PonerStringEnPila(pila,  "MENOR_IGUAL");
+
+		   // PonerEnPolaca("MENOR_IGUAL");
 	    }
       |MENOR      
       {
-		    PonerEnPolaca("MENOR");
+                  PonerStringEnPila(pila,  "MENOR");
+
+		    //PonerEnPolaca("MENOR");
 	    }
       |IGUAL      
       {
-		    PonerEnPolaca("IGUAL");
+                  PonerStringEnPila(pila,  "IGUAL");
+            
+		    //PonerEnPolaca("IGUAL");
 	    }
       |DISTINTO      
       {
-		    PonerEnPolaca("DISTINTO");
+                  PonerStringEnPila(pila,  "DISTINTO");
+
+		    //PonerEnPolaca("DISTINTO");
 	    }
 	  ;
 
@@ -317,7 +336,11 @@ termino:
 	  ;
 
 factor: 
-      ID
+      ID{
+            char * nombre_var = (char*)$<str_val>1;
+            PonerEnPolaca(nombre_var);
+            
+      }
       |CTE_INT 
 	  {
       char* nombre_cte_int = (char*)guardar_cte_int($<int_val>1);
@@ -357,6 +380,7 @@ int main(int argc,char *argv[])
     crearTabla();
     yyparse();
     guardar_ts();
+    pila = crearPila();
     CrearPolaca();
     freeArray(&array_nombres_variables);
   }
