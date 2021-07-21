@@ -1,9 +1,15 @@
 #include "assembler.h"
 #include "globales.h"
+#include "y.tab.h"
 #include <stdio.h>
 
 extern simbolo ts[TAM_TABLA];
 extern cant_elem_ts;
+extern writeIdxPolaca;
+extern nodoPolaca polaca[MAX_TAM_POLACA];
+simbolo simbolo_busqueda;
+
+char * temp_id;
 
 void generarAssembler(){
     FILE* arch = fopen("Final.asm", "w");
@@ -39,7 +45,6 @@ void generarTabla(FILE *arch){
     fprintf(arch, "NEW_LINE DB 0AH,0DH,'$'\n");
 	fprintf(arch, "CWprevio DW ?\n");
 
-    // TODO: escribir tabla de simbolos
     for(int i = 0; i < cant_elem_ts; i++){
         fprintf(arch, "%s ", ts[i].nombre);
         switch(ts[i].tipo_dato){
@@ -60,6 +65,58 @@ void generarTabla(FILE *arch){
     fprintf(arch, "\n");
 }
 
+// Codigo en si
 void escribirCodigo(FILE *arch){
-    //TODO: escribir todo el codigo de la polaca
+    for(int i=0; i < writeIdxPolaca; i++){
+        if(polaca[i].val == NULL) {
+            printf("ERROR no encontre valor en la posicion %d de la polaca", i);
+            return;
+        }
+        if(strcmp("READ", polaca[i].val) == 0)
+            read(arch);
+        else if(strcmp("WRITE", polaca[i].val) == 0)
+            write(arch);
+        else strcpy(temp_id, polaca[i].val);
+    }
+}
+
+// Auxiliares de codigo
+void write(FILE* arch){
+    printf("asm write %s\n", temp_id);
+	existe_simbolo(temp_id); // Si existe, rellena simbolo_busqueda
+	switch(simbolo_busqueda.tipo_dato){
+    case TIPO_CTE_INT:
+	case TIPO_INT:
+		fprintf(arch, "DisplayInteger %s\n", simbolo_busqueda.nombre);
+		break;
+    case TIPO_CTE_FLOAT:
+	case TIPO_FLOAT:
+		fprintf(arch, "DisplayFloat %s,2\n", simbolo_busqueda.nombre);
+		break;
+	case TIPO_STRING:
+		fprintf(arch, "MOV EBX, %s\ndisplayString [EBX]\n", simbolo_busqueda.nombre);
+		break;
+	case TIPO_CTE_STRING:
+		fprintf(arch, "displayString %s\n", simbolo_busqueda.nombre);
+		break;
+	}
+    
+	fprintf(arch, "displayString NEW_LINE\n");
+	fprintf(arch, "\n");
+}
+
+void read(FILE* arch){
+    printf("asm read %s\n", temp_id);
+    existe_simbolo(temp_id); // Si existe, rellena simbolo_busqueda
+	switch(simbolo_busqueda.tipo_dato){
+	case TIPO_INT:
+		fprintf(arch, "getInteger %s\n", simbolo_busqueda.nombre);
+		break;
+	case TIPO_FLOAT:
+		fprintf(arch, "getFloat %s\n", simbolo_busqueda.nombre);
+		break;
+	case TIPO_STRING:
+		fprintf(arch, "getString %s\n", simbolo_busqueda.nombre);
+	}
+	fprintf(arch, "\n");
 }

@@ -97,13 +97,12 @@
 %%
 
 start: 
-	  programa {
-      // Guardar tabla simbolos
-      // Guardar polaca
-      generarAssembler();
-      printf("COMPILACION CORRECTA\n");
-    }
-	  ;
+	programa {
+            // Guardar polaca
+            //generarAssembler();
+            printf("COMPILACION CORRECTA\n");
+      }
+	;
 
 programa: 
 
@@ -207,11 +206,11 @@ salida:
 entrada:
       READ ID{
             if(!existe_simbolo($<str_val>2)){
-                        printf("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",$<str_val>2);
-                        yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
-			}
-                  PonerEnPolaca($<str_val>2);
-                  PonerEnPolaca("READ");
+                  printf("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",$<str_val>2);
+                  yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
+		}
+            PonerEnPolaca($<str_val>2);
+            PonerEnPolaca("READ");
       }
 	  ;
 
