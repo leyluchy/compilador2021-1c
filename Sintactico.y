@@ -1,23 +1,23 @@
 
 %{
-#include <stdio.h>
-#include <stdlib.h>
-#include <conio.h>
-#include <string.h>
-#include "globales.h"
-#include "y.tab.h"
-#include "funciones.c"
-#include "intermedio.c"
-#include "assembler.h"
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <conio.h>
+      #include <string.h>
+      #include "globales.h"
+      #include "y.tab.h"
+      #include "funciones.c"
+      #include "intermedio.c"
+      #include "assembler.h"
 
-FILE  *yyin;
-int yylex();
-void yyerror(const char *s);
-//t_polaca Polaca;
-//t_pila PilaIf;
-//t_pila PilaWhile;
-//int IDXAsignacionMultiple;
-//int ContadorPolaca;
+      FILE  *yyin;
+      int yylex();
+      void yyerror(const char *s);
+      //t_polaca Polaca;
+      //t_pila PilaIf;
+      //t_pila PilaWhile;
+      //int IDXAsignacionMultiple;
+      //int ContadorPolaca;
 
 %}
 
@@ -129,26 +129,26 @@ declaracion:
 
 tipo_variable:
       INT
-	    {
+      {
         tipo_dato = TIPO_INT;
       }
       |FLOAT
-	    {
+      {
         tipo_dato = TIPO_FLOAT;
       }
       |STRING
-	    {
+      {
         tipo_dato = TIPO_STRING;
       }
 	  ;
 
 lista_id:
       lista_id COMA ID
-	    {
+      {
         insertArray(&array_nombres_variables,$<str_val>3);
       }
       | ID
-	    {
+      {
         insertArray(&array_nombres_variables,$<str_val>1);
       }
 	  ;
@@ -160,7 +160,7 @@ bloque:
 
 sentencia: 
       asignacion
-	    |asignacion_mult
+      |asignacion_mult
       |decision
       |iteracion
       |salida
@@ -172,31 +172,45 @@ salida:
 	    {
             char* aux = guardar_cte_int($<int_val>2);
             PonerEnPolaca(aux);
+            PonerEnPolaca(WRITE);
 
       }
       |WRITE CTE_FLOAT
 	    {
 			  char* aux = guardar_cte_float($<real_val>2);
             PonerEnPolaca(aux);
+            PonerEnPolaca(WRITE);
+
 
 	    }
       |WRITE CTE_STRING
 	    {
             char* nombre_cte_string = guardar_cte_string($<str_val>2);
             PonerEnPolaca(nombre_cte_string);
+            PonerEnPolaca(WRITE);
+
 
       }
       |WRITE ID
 	    {
 			if(!existe_simbolo($<str_val>2)){
-                  printf("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",$<str_val>2);
-                  yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
+                        printf("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",$<str_val>2);
+                        yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
 			}
+                  PonerEnPolaca($<str_val>2);
+                  PonerEnPolaca(WRITE);
 	    }		  
 	  ;
 
 entrada:
-      READ ID
+      READ ID{
+            if(!existe_simbolo($<str_val>2)){
+                        printf("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",$<str_val>2);
+                        yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
+			}
+                  PonerEnPolaca($<str_val>2);
+                  PonerEnPolaca(READ);
+      }
 	  ;
 
 asignacion: 

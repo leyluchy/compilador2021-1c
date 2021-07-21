@@ -11,6 +11,7 @@
 #define TAM_TABLA 350
 #define TAM_NOMBRE 32
 
+
 typedef struct {
 	char nombre[TAM_NOMBRE];
 	int tipo_dato;
