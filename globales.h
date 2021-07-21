@@ -10,7 +10,8 @@
 
 #define TAM_TABLA 350
 #define TAM_NOMBRE 32
-
+#define CADENA_MAXIMA 30
+#define MAX_TAM_POLACA 1024
 
 typedef struct {
 	char nombre[TAM_NOMBRE];
@@ -18,5 +19,12 @@ typedef struct {
 	char valor[TAM_NOMBRE];
 	int longitud;
 } simbolo;
+
+typedef struct{
+	char val[CADENA_MAXIMA];
+} nodoPolaca;
+
+
+int existe_simbolo(char * comp);
 
 #endif

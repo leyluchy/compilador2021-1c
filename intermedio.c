@@ -4,12 +4,10 @@
 #include <stdarg.h>
 #include <string.h>
 #include <math.h>
-#define CADENA_MAXIMA 30
-#define MAX_TAM_POLACA 1024
+#include "globales.h"
+
 #define ERROR -1
 #define OK 0
-
-
 
 //Pila
 typedef struct
@@ -26,12 +24,6 @@ typedef struct s_nodoPila{
 typedef t_nodoPila *t_pila;
 
 //Polaca
-typedef struct{
-	char val[CADENA_MAXIMA];
-
-}
- nodoPolaca;
-
 nodoPolaca polaca[MAX_TAM_POLACA];
 
 

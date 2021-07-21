@@ -95,13 +95,12 @@
 %%
 
 start: 
-	  programa {
-      // Guardar tabla simbolos
-      // Guardar polaca
-      generarAssembler();
-      printf("COMPILACION CORRECTA\n");
-    }
-	  ;
+	programa {
+            // Guardar polaca
+            generarAssembler();
+            printf("COMPILACION CORRECTA\n");
+      }
+	;
 
 programa: 
 
@@ -172,14 +171,14 @@ salida:
 	    {
             char* aux = guardar_cte_int($<int_val>2);
             PonerEnPolaca(aux);
-            PonerEnPolaca(WRITE);
+            PonerEnPolaca("WRITE");
 
       }
       |WRITE CTE_FLOAT
 	    {
 			  char* aux = guardar_cte_float($<real_val>2);
             PonerEnPolaca(aux);
-            PonerEnPolaca(WRITE);
+            PonerEnPolaca("WRITE");
 
 
 	    }
@@ -187,7 +186,7 @@ salida:
 	    {
             char* nombre_cte_string = guardar_cte_string($<str_val>2);
             PonerEnPolaca(nombre_cte_string);
-            PonerEnPolaca(WRITE);
+            PonerEnPolaca("WRITE");
 
 
       }
@@ -198,18 +197,18 @@ salida:
                         yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
 			}
                   PonerEnPolaca($<str_val>2);
-                  PonerEnPolaca(WRITE);
+                  PonerEnPolaca("WRITE");
 	    }		  
 	  ;
 
 entrada:
       READ ID{
             if(!existe_simbolo($<str_val>2)){
-                        printf("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",$<str_val>2);
-                        yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
-			}
-                  PonerEnPolaca($<str_val>2);
-                  PonerEnPolaca(READ);
+                  printf("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n",$<str_val>2);
+                  yyerror("NO SE DECLARO LA VARIABLE - %s - EN LA SECCION DE DEFINICIONES\n");
+		}
+            PonerEnPolaca($<str_val>2);
+            PonerEnPolaca("READ");
       }
 	  ;
 
