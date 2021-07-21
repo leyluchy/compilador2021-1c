@@ -4,9 +4,11 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <string.h>
+#include "globales.h"
 #include "y.tab.h"
 #include "funciones.c"
 #include "intermedio.c"
+#include "assembler.h"
 
 FILE  *yyin;
 int yylex();
@@ -93,7 +95,12 @@ void yyerror(const char *s);
 %%
 
 start: 
-	  programa {printf("COMPILACION CORRECTA\n");}
+	  programa {
+      // Guardar tabla simbolos
+      // Guardar polaca
+      generarAssembler();
+      printf("COMPILACION CORRECTA\n");
+    }
 	  ;
 
 programa: 
@@ -121,17 +128,17 @@ declaracion:
 	  ;
 
 tipo_variable:
-      INT 
+      INT
 	    {
-        strcpy(tipo_dato,$<str_val>1);
+        tipo_dato = TIPO_INT;
       }
       |FLOAT
 	    {
-        strcpy(tipo_dato,$<str_val>1);
+        tipo_dato = TIPO_FLOAT;
       }
       |STRING
 	    {
-        strcpy(tipo_dato,$<str_val>1);
+        tipo_dato = TIPO_STRING;
       }
 	  ;
 

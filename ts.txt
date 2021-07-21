@@ -1,8 +1,0 @@
-NOMBRE|TIPODATO|VALOR|LONGITUD
-i1|INT|-|-
-i2|INT|-|-
-i3|INT|-|-
-_cte_string_0|string|"Test asig mult cte: da dos 1"|13
-_1|int|1|-
-_cte_string_1|string|"Test asig mult var: da dos 2"|13
-_2|int|2|-
