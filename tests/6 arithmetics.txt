@@ -3,14 +3,14 @@ i1, i2, i3 : INT
 f1, f2, f3 : FLOAT
 ENDDEC
 
-WRITE "Testeando aritmetica: da 4"
+WRITE "Test cuentas int: da 4"
 
 i1 := 10
 i2 := 21
 i3 := (i2 / 2 + 3*(2 - i1)) MOD 10
 WRITE i3
 
-WRITE "Testeando aritmetica: da 4,5"
+WRITE "Test cuentas float: da 4,5"
 
 f1 := 10
 f2 := 21
@@ -28,3 +28,7 @@ f1 := 4.5
 f2 := 2.5
 i3 := f1 DIV f2
 WRITE i3
+
+WRITE "Test negativo: da -2"
+i1 := -2
+WRITE i1
