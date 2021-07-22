@@ -83,7 +83,6 @@ void escribirCodigo(FILE *arch){
 
 // Auxiliares de codigo
 void write(FILE* arch){
-    printf("asm write %s\n", temp_id);
 	existe_simbolo(temp_id); // Si existe, rellena simbolo_busqueda
 	switch(simbolo_busqueda.tipo_dato){
     case TIPO_CTE_INT:
@@ -107,7 +106,6 @@ void write(FILE* arch){
 }
 
 void read(FILE* arch){
-    printf("asm read %s\n", temp_id);
     existe_simbolo(temp_id); // Si existe, rellena simbolo_busqueda
 	switch(simbolo_busqueda.tipo_dato){
 	case TIPO_INT:
