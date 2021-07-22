@@ -7,14 +7,14 @@ WRITE "Testeando aritmetica: da 4"
 
 i1 := 10
 i2 := 21
-i3 := i2 / 2 + 3*(2 - i1) MOD 10
+i3 := (i2 / 2 + 3*(2 - i1)) MOD 10
 WRITE i3
 
 WRITE "Testeando aritmetica: da 4,5"
 
 f1 := 10
 f2 := 21
-f3 := f2 / 2 + 3*(2 - f1) MOD 10
+f3 := (f2 / 2 + 3*(2 - f1)) MOD 10
 WRITE f3
 
 WRITE "Test float div int: da 2"
