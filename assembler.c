@@ -9,7 +9,7 @@ extern writeIdxPolaca;
 extern nodoPolaca polaca[MAX_TAM_POLACA];
 simbolo simbolo_busqueda;
 
-char * temp_id;
+char temp_id[CADENA_MAXIMA];
 
 void generarAssembler(){
     FILE* arch = fopen("Final.asm", "w");
@@ -55,7 +55,7 @@ void generarTabla(FILE *arch){
             fprintf(arch, "dd %s\n", ts[i].valor);
             break;
         case TIPO_CTE_STRING:
-            fprintf(arch, "db \"%s\", '$'\n", ts[i].valor);
+            fprintf(arch, "db %s, '$'\n", ts[i].valor);
             break;
         default: //Es una variable int, float o puntero a string
             fprintf(arch, "dd ?\n");
@@ -76,7 +76,8 @@ void escribirCodigo(FILE *arch){
             read(arch);
         else if(strcmp("WRITE", polaca[i].val) == 0)
             write(arch);
-        else strcpy(temp_id, polaca[i].val);
+        else
+            strcpy(temp_id, polaca[i].val);
     }
 }
 
