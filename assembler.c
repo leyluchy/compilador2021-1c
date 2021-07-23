@@ -72,16 +72,80 @@ void escribirCodigo(FILE *arch){
             printf("ERROR no encontre valor en la posicion %d de la polaca", i);
             return;
         }
+
         if(strcmp("READ", polaca[i].val) == 0)
             read(arch);
         else if(strcmp("WRITE", polaca[i].val) == 0)
             write(arch);
-        else
-            strcpy(temp_id, polaca[i].val);
+        else if(strcmp("MAS", polaca[i].val) == 0)
+            suma(arch);
+        else if(strcmp("MENOS", polaca[i].val) == 0)
+            resta(arch);
+        else if(strcmp("-", polaca[i].val) == 0)
+            cambiar_signo(arch);
+        else if(strcmp("POR", polaca[i].val) == 0)
+            multiplicacion(arch);
+        else if(strcmp("DIVIDIDO", polaca[i].val) == 0)
+            division(arch);
+        else if(strcmp("DIV", polaca[i].val) == 0)
+            division_entera(arch);
+        else if(strcmp("MOD", polaca[i].val) == 0)
+            modulo(arch);
+        else {
+            // Sino es un ID
+            strcpy(temp_id, polaca[i].val); // Lo cargo en variable global
+            load(arch); // Decide como cargarlo segun el tipo de dato
+        }
     }
 }
 
 // Auxiliares de codigo
+void load(FILE* arch){
+    existe_simbolo(temp_id); // Si existe, rellena simbolo_busqueda
+
+    switch(simbolo_busqueda.tipo_dato){
+    case TIPO_CTE_INT:
+	case TIPO_INT:
+		//FILD n; Donde n es el numero integer en memoria
+        fprintf(arch, "FILD %s\n", simbolo_busqueda.nombre);
+        break;
+    case TIPO_CTE_FLOAT:
+	case TIPO_FLOAT:
+		//FLD n; Donde n es el numero float en memoria
+        fprintf(arch, "FLD %s\n", simbolo_busqueda.nombre);
+        break;
+	// Las strings no se cargan en assembler ahora. Solo se usan seguidas de un write, la dejo en temp_id
+	}
+}
+
+void suma(FILE* arch){
+    fprintf(arch, "FADD\n");
+}
+
+void resta(FILE* arch){
+    fprintf(arch, "FSUB\n");
+}
+
+void cambiar_signo(FILE* arch){
+    fprintf(arch, "FCHS\n");
+}
+
+void multiplicacion(FILE* arch){
+    fprintf(arch, "FMUL\n");
+}
+
+void division(FILE* arch){
+    fprintf(arch, "FDIV\n");
+}
+
+void division_entera(FILE* arch){
+    // DIV da quotient e EAX
+}
+
+void modulo(FILE* arch){
+    // DIV da remainder o modulo en EDX
+}
+
 void write(FILE* arch){
 	existe_simbolo(temp_id); // Si existe, rellena simbolo_busqueda
 	switch(simbolo_busqueda.tipo_dato){
