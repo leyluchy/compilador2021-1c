@@ -348,8 +348,10 @@ factor:
 	  |MENOS CTE_INT 
 	  {
       char* nombre_cte_int = (char*)guardar_cte_int($<int_val>2);
-      
-      PonerEnPolaca(nombre_cte_int);
+      char str[strlen(nombre_cte_int)+1];
+      str[0]='-';
+      strcat(str,nombre_cte_int);
+      PonerEnPolaca(str);
 
 	  }
       |CTE_FLOAT
@@ -363,7 +365,10 @@ factor:
 	  {
       float valor = $<real_val>2;
       char* nombre_cte_float = (char*)guardar_cte_float(valor);
-      PonerEnPolaca(nombre_cte_float);
+      char str[strlen(nombre_cte_float)+1];
+      str[0]='-';
+      strcat(str,nombre_cte_float);
+      PonerEnPolaca(str);
 
 	  }
       |PA expresion PC
