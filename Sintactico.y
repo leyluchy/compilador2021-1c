@@ -13,6 +13,8 @@
       FILE  *yyin;
       int yylex();
       void yyerror(const char *s);
+      
+      t_pila* pila;
       //t_polaca Polaca;
       //t_pila PilaIf;
       //t_pila PilaWhile;
@@ -97,7 +99,7 @@
 start: 
 	programa {
             // Guardar polaca
-            generarAssembler();
+            //generarAssembler();
             printf("COMPILACION CORRECTA\n");
       }
 	;
@@ -213,15 +215,21 @@ entrada:
 	  ;
 
 asignacion: 
-      ID ASIG expresion
+      ID ASIG expresion{
+            PonerEnPolaca("ASIG");
+      }
       |ID ASIG CTE_STRING
 	  {
+            PonerEnPolaca("ASIG");
+              
 			char * nombre_cte_string = guardar_cte_string($<str_val>3);
 	  }
 	  ;
 	  
 asignacion_mult:
-	  lista ASIGMULT expresion
+	  lista ASIGMULT expresion{
+              PonerEnPolaca("ASIGMULT");
+        }
 	  ;
 
 lista:
@@ -247,7 +255,9 @@ condicion:
 	  ;
 
 comparacion: 
-      expresion comparador expresion
+      expresion comparador expresion{
+            PonerEnPolaca(sacarDePila(pila)->cadena);
+      }
       |expresion
 	  ;
 
@@ -258,27 +268,36 @@ between:
 comparador:
       MAYOR
       {
-		    PonerEnPolaca("MAYOR");
+                  PonerStringEnPila(pila,  "MAYOR");
 	    }
       |MAYOR_IGUAL      
       {
-		    PonerEnPolaca("MAYOR_IGUAL");
+                  PonerStringEnPila(pila,  "MAYOR_IGUAL");
+		    //PonerEnPolaca("MAYOR_IGUAL");
 	    }
       |MENOR_IGUAL      
       {
-		    PonerEnPolaca("MENOR_IGUAL");
+                  PonerStringEnPila(pila,  "MENOR_IGUAL");
+
+		   // PonerEnPolaca("MENOR_IGUAL");
 	    }
       |MENOR      
       {
-		    PonerEnPolaca("MENOR");
+                  PonerStringEnPila(pila,  "MENOR");
+
+		    //PonerEnPolaca("MENOR");
 	    }
       |IGUAL      
       {
-		    PonerEnPolaca("IGUAL");
+                  PonerStringEnPila(pila,  "IGUAL");
+            
+		    //PonerEnPolaca("IGUAL");
 	    }
       |DISTINTO      
       {
-		    PonerEnPolaca("DISTINTO");
+                  PonerStringEnPila(pila,  "DISTINTO");
+
+		    //PonerEnPolaca("DISTINTO");
 	    }
 	  ;
 
@@ -316,7 +335,11 @@ termino:
 	  ;
 
 factor: 
-      ID
+      ID{
+            char * nombre_var = (char*)$<str_val>1;
+            PonerEnPolaca(nombre_var);
+            
+      }
       |CTE_INT 
 	  {
       char* nombre_cte_int = (char*)guardar_cte_int($<int_val>1);
@@ -325,7 +348,10 @@ factor:
 	  |MENOS CTE_INT 
 	  {
       char* nombre_cte_int = (char*)guardar_cte_int($<int_val>2);
-      PonerEnPolaca(nombre_cte_int);
+      char str[strlen(nombre_cte_int)+1];
+      str[0]='-';
+      strcat(str,nombre_cte_int);
+      PonerEnPolaca(str);
 
 	  }
       |CTE_FLOAT
@@ -339,7 +365,10 @@ factor:
 	  {
       float valor = $<real_val>2;
       char* nombre_cte_float = (char*)guardar_cte_float(valor);
-      PonerEnPolaca(nombre_cte_float);
+      char str[strlen(nombre_cte_float)+1];
+      str[0]='-';
+      strcat(str,nombre_cte_float);
+      PonerEnPolaca(str);
 
 	  }
       |PA expresion PC
@@ -353,10 +382,13 @@ int main(int argc,char *argv[])
   }
   else{
 	initArray(&array_nombres_variables);
+    pila = crearPila();
     crearTabla();
+    CrearPolaca();
     yyparse();
     guardar_ts();
-    CrearPolaca();
+    
+    guardarPolaca(argv[2]);
     freeArray(&array_nombres_variables);
   }
   fclose(yyin);

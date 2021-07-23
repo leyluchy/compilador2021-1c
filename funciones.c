@@ -188,3 +188,56 @@ char* concat(const char *s1, const char *s2)
     memcpy(result + len1, s2, len2 + 1); // +1 to copy the null-terminator
     return result;
 }
+
+// char * GetTokenNameFromID(int id){
+   
+//   switch(){
+//      case START     = 258,
+//      case END       = 259,
+//      case DECVAR    = 260,
+//      case ENDDEC    = 261,
+//      case INT       = 262,
+//      case FLOAT     = 263,
+//      case STRING    = 264,
+//      case WHILE     = 265,
+//      case ENDWHILE  = 266,
+//      case IF        = 267,
+//      case THEN = 268,
+//      case ELSE = 269,
+//      case ENDIF = 270,
+//      case AND = 271,
+//      case OR = 272,
+//      case NOT = 273,
+//      case ASIG = 274,
+//      case ASIGMULT = 275,
+//      case MAS = 276,
+//      case MENOS = 277,
+//      case POR = 278,
+//      case DIVIDIDO = 279,
+//      case MOD = 280,
+//      case DIV = 281,
+//      case BETWEEN = 282,
+//      case MENOR = 283,
+//      case MAYOR = 284,
+//      case MENOR_IGUAL = 285,
+//      case MAYOR_IGUAL = 286,
+//      case IGUAL = 287,
+//      case DISTINTO = 288,
+//      case PA = 289,
+//      case PC = 290,
+//      case CA = 291,
+//      case CC = 292,
+//      case LLA = 293,
+//      case LLC = 294,
+//      case COMA = 295,
+//      case PUNTO_COMA = 296,
+//      case DOS_PUNTOS = 297,
+//      case READ = 298,
+//      case WRITE = 299,
+//      case ID = 300,
+//      case CTE_INT = 301,
+//      case CTE_FLOAT = 302,
+//      case CTE_STRING = 303
+
+//   }
+//}

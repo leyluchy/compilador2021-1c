@@ -1,0 +1,1 @@
+_cte_string_0 WRITE _4.500000 ASIG _2 ASIG f1 i1 DIV ASIG i3 WRITE 
