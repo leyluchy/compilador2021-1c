@@ -77,6 +77,8 @@ void escribirCodigo(FILE *arch){
             read(arch);
         else if(strcmp("WRITE", polaca[i].val) == 0)
             write(arch);
+        else if(strcmp("ASIG", polaca[i].val) == 0)
+            write(arch);
         else if(strcmp("MAS", polaca[i].val) == 0)
             suma(arch);
         else if(strcmp("MENOS", polaca[i].val) == 0)
@@ -91,6 +93,17 @@ void escribirCodigo(FILE *arch){
             division_entera(arch);
         else if(strcmp("MOD", polaca[i].val) == 0)
             modulo(arch);
+        else if(strcmp("CMP", polaca[i].val) == 0)
+            comparar(arch);
+        else if(strcmp("CMP", polaca[i].val) == 0){
+            // Escribir salto y etiqueta
+            saltar(arch, polaca[i].val, polaca[i+1].val);
+            i++;
+        } else if(strcmp("ETIQUETA", polaca[i].val) == 0){
+            // Escribir etiqueta
+            i++;
+            etiquetar(arch, polaca[i].val);
+        }
         else {
             // Sino es un ID
             strcpy(temp_id, polaca[i].val); // Lo cargo en variable global
@@ -140,6 +153,8 @@ void division(FILE* arch){
 
 void division_entera(FILE* arch){
     // DIV da quotient e EAX
+    // fprintf(arch, "DIV\n");
+    // fprintf(arch, "MOV %s, EAX\n");
 }
 
 void modulo(FILE* arch){
@@ -182,4 +197,20 @@ void read(FILE* arch){
 		fprintf(arch, "getString %s\n", simbolo_busqueda.nombre);
 	}
 	fprintf(arch, "\n");
+}
+
+void asignar(FILE* arch){
+    
+}
+
+void comparar(FILE *arch){
+	fprintf(arch, "FXCH\nFCOMP\nFSTSW AX\nSAHF\n");
+}
+
+void saltar(FILE* arch, char* salto, char* etiqueta){
+    fprintf(arch, "%s %s\n", salto, etiqueta);
+}
+
+void etiquetar(FILE* arch, char* etiqueta){
+    fprintf(arch, "%s:\n", etiqueta);
 }
