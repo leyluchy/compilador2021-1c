@@ -100,7 +100,7 @@ start:
 	programa {
             // Guardar polaca
             //generarAssembler();
-            printf("COMPILACION CORRECTA\n");
+            printf("\n##########\nCOMPILACION CORRECTA\n##########\n");
       }
 	;
 
@@ -242,8 +242,20 @@ iteracion:
 	  ;
 
 decision:
-      IF PA condicion PC LLA bloque LLC
-      | IF PA condicion PC LLA bloque LLC ELSE LLA bloque LLC
+      IF PA condicion PC LLA bloque LLC{
+            int idx = atoi(sacarDePila(pila)->cadena);
+            PonerEnPolacaNro(idx,itoa(GetWriteIDX()) );
+      }
+      | IF PA condicion PC LLA bloque LLC ELSE LLA bloque LLC{
+            int idx = atoi(sacarDePila(pila)-> cadena);
+            char * str = (char *)malloc(10);
+            itoa(GetWriteIDX(), str,10);
+            PonerEnPolacaNro(idx,str );
+            int tgt = idx+1;
+            idx = atoi(sacarDePila(pila)-> cadena);
+            itoa(tgt, str,10);
+            PonerEnPolacaNro(idx, str);
+      }
 	  ;
 
 condicion: 
@@ -256,7 +268,16 @@ condicion:
 
 comparacion: 
       expresion comparador expresion{
+            PonerEnPolaca("CMP");
             PonerEnPolaca(sacarDePila(pila)->cadena);
+            // printf("##Poner String en pila##\n");
+            char * str = (char *)malloc(10);
+            itoa(GetWriteIDX(), str,10);
+            PonerEnPolaca("");
+            // printf(str);
+            // printf("\n####\n");
+
+            PonerStringEnPila( pila, str); //TODO:revisar
       }
       |expresion
 	  ;
@@ -268,36 +289,27 @@ between:
 comparador:
       MAYOR
       {
-                  PonerStringEnPila(pila,  "MAYOR");
+                  PonerStringEnPila(pila,  "BLE");
 	    }
       |MAYOR_IGUAL      
       {
-                  PonerStringEnPila(pila,  "MAYOR_IGUAL");
-		    //PonerEnPolaca("MAYOR_IGUAL");
+                 PonerStringEnPila(pila,  "BLT");
 	    }
       |MENOR_IGUAL      
       {
-                  PonerStringEnPila(pila,  "MENOR_IGUAL");
-
-		   // PonerEnPolaca("MENOR_IGUAL");
+                  PonerStringEnPila(pila,  "BGT");
 	    }
       |MENOR      
       {
-                  PonerStringEnPila(pila,  "MENOR");
-
-		    //PonerEnPolaca("MENOR");
+                  PonerStringEnPila(pila,  "BGE");
 	    }
       |IGUAL      
       {
-                  PonerStringEnPila(pila,  "IGUAL");
-            
-		    //PonerEnPolaca("IGUAL");
+                  PonerStringEnPila(pila,  "BNE");
 	    }
       |DISTINTO      
       {
-                  PonerStringEnPila(pila,  "DISTINTO");
-
-		    //PonerEnPolaca("DISTINTO");
+                  PonerStringEnPila(pila,  "BEQ");
 	    }
 	  ;
 
@@ -377,6 +389,9 @@ factor:
 %%
 int main(int argc,char *argv[])
 {
+      printf("\n");
+      printf("\n");
+      printf("\n");
   if ((yyin = fopen(argv[1], "rt")) == NULL){
 	  printf("\nNo se puede abrir el archivo: %s\n", argv[1]);
   }
@@ -389,8 +404,12 @@ int main(int argc,char *argv[])
     guardar_ts();
     
     guardarPolaca(argv[2]);
+          printf("\n");
     freeArray(&array_nombres_variables);
   }
+        printf("\n");
+      printf("\n");
+      printf("\n");
   fclose(yyin);
   return 0;
 }

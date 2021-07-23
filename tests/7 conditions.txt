@@ -1,35 +1,50 @@
 WRITE "Testeando comparadores"
 
 IF (1 < 2) {
-	WRITE "< funciona :)"	
+	WRITE "< "
+
+	WRITE "< funciona :)"
 }
 
 IF (2 > 1) {
-	WRITE "> funciona :)"	
+	WRITE "> "
+	WRITE "> funciona :)"
 }
 
 IF (1 != 2) {
+	WRITE "!= "
+
 	WRITE "!= funciona :)"	
 }
 
 IF (1 == 1) {
+	WRITE "== "
+
 	WRITE "== funciona :)"	
 }
 
 IF (1 >= 1) {
+	WRITE ">= "
+
 	WRITE ">= funciona :)"	
 }
 
 IF (1 <= 1) {
+	WRITE "<= "
+
 	WRITE "<= funciona :)"	
 }
 
 WRITE "Testeando operadores booleanos"
 
 IF (1 < 2 && 2 < 3) {
+	WRITE "&& "
+
 	WRITE "AND funciona :)"	
 }
 
 IF (1 > 2 || 2 < 3) {
+	WRITE "|| "
+
 	WRITE "OR funciona :)"	
 }
