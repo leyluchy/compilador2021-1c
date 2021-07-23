@@ -1,0 +1,1 @@
+_cte_string_0 WRITE _1 _2 MENOR _cte_string_1 WRITE _2 _1 MAYOR _cte_string_2 WRITE _1 _2 DISTINTO _cte_string_3 WRITE _1 _1 IGUAL _cte_string_4 WRITE _1 _1 MAYOR_IGUAL _cte_string_5 WRITE _1 _1 MENOR_IGUAL _cte_string_6 WRITE _cte_string_7 WRITE _1 _2 MENOR _2 _3 MENOR _cte_string_8 WRITE _1 _2 MAYOR _2 _3 MENOR _cte_string_9 WRITE 

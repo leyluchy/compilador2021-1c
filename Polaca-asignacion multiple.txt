@@ -1,0 +1,1 @@
+_cte_string_0 WRITE _1 ASIGMULT i1 WRITE i2 WRITE _cte_string_1 WRITE _2 ASIG i3 ASIGMULT i1 WRITE i2 WRITE 

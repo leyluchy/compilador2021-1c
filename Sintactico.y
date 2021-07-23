@@ -348,6 +348,7 @@ factor:
 	  |MENOS CTE_INT 
 	  {
       char* nombre_cte_int = (char*)guardar_cte_int($<int_val>2);
+      
       PonerEnPolaca(nombre_cte_int);
 
 	  }
@@ -376,11 +377,13 @@ int main(int argc,char *argv[])
   }
   else{
 	initArray(&array_nombres_variables);
+    pila = crearPila();
     crearTabla();
+    CrearPolaca();
     yyparse();
     guardar_ts();
-    pila = crearPila();
-    CrearPolaca();
+    
+    guardarPolaca(argv[2]);
     freeArray(&array_nombres_variables);
   }
   fclose(yyin);

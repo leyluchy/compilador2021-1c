@@ -1,0 +1,1 @@
+_cte_string_0 WRITE numero READ _cte_string_1 WRITE numero WRITE 

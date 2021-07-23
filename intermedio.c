@@ -55,12 +55,15 @@ t_pila pilaASM;
 
 	t_pila* crearPila()
 	{
+		// printf("CrearPila\n");
 	    t_pila* pp = (t_pila*)malloc(sizeof(t_nodoPila));
 		return pp;
 	}
 
 	int ponerEnPila(t_pila* pp,t_info* info)
 	{
+		// printf("poner en Pila\n");
+
 	    t_nodoPila* pn=(t_nodoPila*)malloc(sizeof(t_nodoPila));
 	    if(!pn)
 	        return 0;
@@ -72,6 +75,8 @@ t_pila pilaASM;
 
 	t_info * sacarDePila(t_pila* pp)
 	{
+		// printf("SacardEPila\n");
+
 		t_info* info = (t_info *) malloc(sizeof(t_info));
 	    if(!*pp){
 	    	return NULL;
@@ -84,6 +89,8 @@ t_pila pilaASM;
 
 	void vaciarPila(t_pila* pp)
 	{
+		// printf("VaciarPila\n");
+
 	    t_nodoPila* pn;
 	    while(*pp)
 	    {
@@ -127,8 +134,7 @@ char * SacarPolaca(){
 }
 int PonerEnPolaca( char *cadena)
 {
-	printf(cadena);
-	printf(" ");
+
 	if(writeIdxPolaca >= MAX_TAM_POLACA  ){
 		printf("ponerEnPolaca: #POL_FULL.\n");
 		return ERROR;
@@ -137,6 +143,8 @@ int PonerEnPolaca( char *cadena)
 		printf("ponerEnPolaca: #LONG_OP\n");
 		return ERROR;
 	}
+	printf(cadena);
+	printf(" ");
 	strcpy(polaca[writeIdxPolaca].val, cadena);
 	writeIdxPolaca++;
 	return OK;
@@ -151,16 +159,18 @@ int PonerEnPolacaNro(int pos, char *cadena)
 	return OK;
 }
 
-void guardarPolaca(){
-	FILE*fp=fopen("intermedia.txt","w+");
+void guardarPolaca( char *cadena){
+
+	FILE*fp=fopen(cadena,"w+");
 	if(!fp){
-		printf("Error al crear intermedia.txt\n");
+		printf("Error al crear %s", cadena);
 		return;
 	}
 	
 	int cont = 0;
 	while(cont < writeIdxPolaca){
 		fprintf(fp, "%s ", polaca[cont].val);
+		cont++;
 	}
 	fclose(fp);
 }
