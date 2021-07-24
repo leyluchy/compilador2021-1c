@@ -1,0 +1,11 @@
+NOMBRE|TIPODATO|VALOR|LONGITUD
+i1|INT|-|-
+i2|INT|-|-
+i3|INT|-|-
+i4|INT|-|-
+i5|INT|-|-
+i6|INT|-|-
+_cte_string_0|CTE_STRING|"Test asig mult cte: da dos 1"|30
+_1|CTE_INT|1|-
+_cte_string_1|CTE_STRING|"Test asig mult var: da seis 6"|31
+_6|CTE_INT|6|-

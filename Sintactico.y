@@ -13,8 +13,10 @@
       FILE  *yyin;
       int yylex();
       void yyerror(const char *s);
+      char* auxVar;
       
-      t_pila* pila;
+      pila* pilaComp;
+      pila* pilaAsigMult;
       //t_polaca Polaca;
       //t_pila PilaIf;
       //t_pila PilaWhile;
@@ -121,7 +123,7 @@ declaraciones:
 
 declaracion:
       lista_id DOS_PUNTOS tipo_variable
-	  {
+	{
         guardar_variables_ts();
         freeArray(&array_nombres_variables);
         initArray(&array_nombres_variables);
@@ -186,6 +188,7 @@ salida:
 	    }
       |WRITE CTE_STRING
 	    {
+                
             char* nombre_cte_string = guardar_cte_string($<str_val>2);
             PonerEnPolaca(nombre_cte_string);
             PonerEnPolaca("WRITE");
@@ -216,34 +219,52 @@ entrada:
 
 asignacion: 
       ID ASIG {
-            char * nombre_var = (char*)$<str_val>1;
-            PonerEnPolaca(nombre_var);            
+            char aux[strlen($<str_val>1) + 1];
+            strcpy(aux, $<str_val>1);
+            PonerEnPolaca(aux);            
       }expresion{
             PonerEnPolaca("ASIG");
       }
       |ID ASIG CTE_STRING
 	  {
-            char * nombre_var = (char*)$<str_val>1;
-            PonerEnPolaca(nombre_var);
-		char * nombre_cte_string = guardar_cte_string($<str_val>3);
-            PonerEnPolaca(nombre_cte_string);
+            char aux[strlen($<str_val>1) + 1];
+            strcpy(aux, $<str_val>1);
+            PonerEnPolaca(aux); 
+		aux[strlen($<str_val>3) + 1];
+            strcpy(aux, $<str_val>3);
+            PonerEnPolaca(aux); 
             PonerEnPolaca("ASIG");
 	  }
 	  ;
 	  
 asignacion_mult:
 	  lista ASIGMULT expresion{
-              PonerEnPolaca("ASIGMULT");
+            PonerEnPolaca("ASIG");
+            char* info = sacarDePila(pilaAsigMult);
+            while(!pilaVacia(pilaAsigMult)){
+		      // printf("\n###\t INFO*:\t\t\t %p\t###\n",&info);
+		       sprintf(stderr,"\n###\t INFO:\t\t\t %s\t###\n",info);
+                PonerEnPolaca(info);
+		      //printf("\n###\t AUXVAR:\t\t\t %s\t###\n",auxVar);
+                PonerEnPolaca(auxVar);
+                PonerEnPolaca("ASIG");
+                info = sacarDePila(pilaAsigMult);
+            }
         }
 	  ;
 
 lista:
-	  ID ASIGMULT ID{
-              PonerStringEnPila(pila, $<str_val>1);
-              PonerStringEnPila(pila, $<str_val>3);
+	  ID  ASIGMULT ID{ //CTEE?
+              char aux[strlen($<str_val>1) + 1];
+              strcpy(aux, $<str_val>1);
+              PonerEnPolaca(aux);
+              ponerEnPila(pilaAsigMult, aux);
+              auxVar = aux;
         }
 	  |lista ASIGMULT ID{
-              PonerStringEnPila(pila, $<str_val>3); //!!
+              char aux[strlen($<str_val>3) + 1];
+              strcpy(aux, $<str_val>3);
+              ponerEnPila(pilaAsigMult, aux); //!!
 
         }
 	  ;
@@ -254,16 +275,16 @@ iteracion:
 
 decision:
       IF PA condicion PC LLA bloque LLC{
-            int idx = atoi(sacarDePila(pila)->cadena);
+            int idx = atoi(sacarDePila(pilaComp));
             PonerEnPolacaNro(idx,itoa(GetWriteIDX()) );
       }
       | IF PA condicion PC LLA bloque LLC ELSE LLA bloque LLC{
-            int idx = atoi(sacarDePila(pila)-> cadena);
+            int idx = atoi(sacarDePila(pilaComp));
             char * str = (char *)malloc(10);
             itoa(GetWriteIDX(), str,10);
             PonerEnPolacaNro(idx,str );
             int tgt = idx+1;
-            idx = atoi(sacarDePila(pila)-> cadena);
+            idx = atoi(sacarDePila(pilaComp));
             itoa(tgt, str,10);
             PonerEnPolacaNro(idx, str);
       }
@@ -280,7 +301,7 @@ condicion:
 comparacion: 
       expresion comparador expresion{
             PonerEnPolaca("CMP");
-            PonerEnPolaca(sacarDePila(pila)->cadena);
+            PonerEnPolaca(sacarDePila(pilaComp));
             // printf("##Poner String en pila##\n");
             char * str = (char *)malloc(10);
             itoa(GetWriteIDX(), str,10);
@@ -288,7 +309,7 @@ comparacion:
             // printf(str);
             // printf("\n####\n");
 
-            PonerStringEnPila( pila, str); //TODO:revisar
+            ponerEnPila( pilaComp, str); //TODO:revisar
       }
       |expresion
 	  ;
@@ -300,28 +321,28 @@ between:
 comparador:
       MAYOR
       {
-                  PonerStringEnPila(pila,  "BLE");
-	    }
+                  ponerEnPila(pilaComp,  "BLE");
+	}
       |MAYOR_IGUAL      
       {
-                 PonerStringEnPila(pila,  "BLT");
-	    }
+                 ponerEnPila(pilaComp,  "BLT");
+	}
       |MENOR_IGUAL      
       {
-                  PonerStringEnPila(pila,  "BGT");
-	    }
+                  ponerEnPila(pilaComp,  "BGT");
+	}
       |MENOR      
       {
-                  PonerStringEnPila(pila,  "BGE");
-	    }
+                  ponerEnPila(pilaComp,  "BGE");
+	}
       |IGUAL      
       {
-                  PonerStringEnPila(pila,  "BNE");
-	    }
+                  ponerEnPila(pilaComp,  "BNE");
+	}
       |DISTINTO      
       {
-                  PonerStringEnPila(pila,  "BEQ");
-	    }
+                  ponerEnPila(pilaComp,  "BEQ");
+	}
 	  ;
 
 		
@@ -359,8 +380,9 @@ termino:
 
 factor: 
       ID{
-            char * nombre_var = (char*)$<str_val>1;
-            PonerEnPolaca(nombre_var);
+            char aux[strlen($<str_val>1) + 1];
+            strcpy(aux, $<str_val>1);
+            PonerEnPolaca(aux);
             
       }
       |CTE_INT 
@@ -403,26 +425,29 @@ int main(int argc,char *argv[])
       printf("\n");
       printf("\n");
       printf("\n");
-  if ((yyin = fopen(argv[1], "rt")) == NULL){
-	  printf("\nNo se puede abrir el archivo: %s\n", argv[1]);
-  }
-  else{
-	initArray(&array_nombres_variables);
-    pila = crearPila();
-    crearTabla();
-    CrearPolaca();
-    yyparse();
-    guardar_ts();
-    
-    guardarPolaca(argv[2]);
-          printf("\n");
-    freeArray(&array_nombres_variables);
-  }
-        printf("\n");
+      if ((yyin = fopen(argv[1], "rt")) == NULL){
+            printf("\nNo se puede abrir el archivo: %s\n", argv[1]);
+      }
+      else{
+            initArray(&array_nombres_variables);
+            pila aux = crearPila();
+            pilaComp = &aux;
+            aux = crearPila();
+            pilaAsigMult = &aux;
+            crearTabla();
+            CrearPolaca();
+            yyparse();
+            guardar_ts();
+
+            guardarPolaca(argv[2]);
+            printf("\n");
+            freeArray(&array_nombres_variables);
+      }
       printf("\n");
       printf("\n");
-  fclose(yyin);
-  return 0;
+      printf("\n");
+      fclose(yyin);
+      return 0;
 }
 void yyerror (char const *s) {
    fprintf (stderr, "%s\n", s);
