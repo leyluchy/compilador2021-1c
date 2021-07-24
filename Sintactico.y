@@ -99,7 +99,7 @@
 start: 
 	programa {
             // Guardar polaca
-            //generarAssembler();
+            generarAssembler();
             printf("\n##########\nCOMPILACION CORRECTA\n##########\n");
       }
 	;

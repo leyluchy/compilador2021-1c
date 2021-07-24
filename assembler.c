@@ -9,7 +9,8 @@ extern writeIdxPolaca;
 extern nodoPolaca polaca[MAX_TAM_POLACA];
 simbolo simbolo_busqueda;
 
-char temp_id[CADENA_MAXIMA];
+char* pilaPolaca[MAX_TAM_POLACA];
+int topPila = -1;
 
 void generarAssembler(){
     FILE* arch = fopen("Final.asm", "w");
@@ -78,7 +79,7 @@ void escribirCodigo(FILE *arch){
         else if(strcmp("WRITE", polaca[i].val) == 0)
             write(arch);
         else if(strcmp("ASIG", polaca[i].val) == 0)
-            write(arch);
+            asignar(arch);
         else if(strcmp("MAS", polaca[i].val) == 0)
             suma(arch);
         else if(strcmp("MENOS", polaca[i].val) == 0)
@@ -106,15 +107,27 @@ void escribirCodigo(FILE *arch){
         }
         else {
             // Sino es un ID
-            strcpy(temp_id, polaca[i].val); // Lo cargo en variable global
-            load(arch); // Decide como cargarlo segun el tipo de dato
+            //strcpy(temp_id, polaca[i].val); // Lo cargo en variable global
+            apilar(polaca[i].val);
+            //load(arch); // Decide como cargarlo segun el tipo de dato
         }
     }
 }
 
+void apilar(char* nodo){
+    topPila++;
+    pilaPolaca[topPila] = nodo;
+}
+
+char* desapilar() {
+    char* aux = pilaPolaca[topPila];
+    topPila--;
+    return aux;
+}
+
 // Auxiliares de codigo
-void load(FILE* arch){
-    existe_simbolo(temp_id); // Si existe, rellena simbolo_busqueda
+void load(FILE* arch, char* name){
+    existe_simbolo(name); // Si existe, rellena simbolo_busqueda
 
     switch(simbolo_busqueda.tipo_dato){
     case TIPO_CTE_INT:
@@ -132,7 +145,14 @@ void load(FILE* arch){
 }
 
 void suma(FILE* arch){
+    int op = desapilar();
+    if (strcmp(op, "@stack") != 0)    
+        load(arch, op);
+    op = desapilar();
+    if (strcmp(op, "@stack") != 0)    
+        load(arch, op);
     fprintf(arch, "FADD\n");
+    apilar("@stack");
 }
 
 void resta(FILE* arch){
@@ -162,7 +182,7 @@ void modulo(FILE* arch){
 }
 
 void write(FILE* arch){
-	existe_simbolo(temp_id); // Si existe, rellena simbolo_busqueda
+	existe_simbolo(desapilar()); // Si existe, rellena simbolo_busqueda
 	switch(simbolo_busqueda.tipo_dato){
     case TIPO_CTE_INT:
 	case TIPO_INT:
@@ -185,7 +205,7 @@ void write(FILE* arch){
 }
 
 void read(FILE* arch){
-    existe_simbolo(temp_id); // Si existe, rellena simbolo_busqueda
+    existe_simbolo(desapilar()); // Si existe, rellena simbolo_busqueda
 	switch(simbolo_busqueda.tipo_dato){
 	case TIPO_INT:
 		fprintf(arch, "getInteger %s\n", simbolo_busqueda.nombre);
@@ -200,7 +220,27 @@ void read(FILE* arch){
 }
 
 void asignar(FILE* arch){
-    
+    char* origen = desapilar();
+    char* destino = desapilar();
+    existe_simbolo(destino); // Si existe, rellena simbolo_busqueda
+	switch(simbolo_busqueda.tipo_dato){
+	case TIPO_INT:
+        if (strcmp("@stack", origen) != 0)
+            load(arch, origen);
+        else // ya esta en copro, lo redondeo a entero
+            fprintf(arch, "FSTCW CWprevio ;Guardo Control Word del copro\nOR CWprevio, 0400h ;Preparo Control Word seteando RC con redondeo hacia abajo\nFLDCW CWprevio ;Cargo nueva Control Word\n");
+		fprintf(arch, "FISTP %s", destino);
+		break;
+	case TIPO_FLOAT:
+        if (strcmp("@stack", origen) != 0)
+            load(arch, origen);
+		fprintf(arch, "FSTP %s", destino);
+		break;
+	case TIPO_STRING:
+		fprintf(arch, "LEA EAX, %s\nMOV %s, EAX", origen, destino);
+		break;
+	}
+    fprintf(arch, "\n");
 }
 
 void comparar(FILE *arch){

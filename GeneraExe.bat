@@ -19,6 +19,7 @@ TPFinal.exe "./tests/6 arithmetics3.txt" "Polaca-arithmetics3.txt"
 TPFinal.exe "./tests/6 arithmetics4.txt" "Polaca-arithmetics4.txt"
 TPFinal.exe "./tests/7 conditions.txt" "Polaca-conditions.txt"
 TPFinal.exe "./tests/8 asignacion multiple.txt" "Polaca-asignacion multiple.txt"
+TPFinal.exe "./tests/9 suma.txt" "Polaca-suma.txt"
 pause
 del lex.yy.c
 del y.tab.c
