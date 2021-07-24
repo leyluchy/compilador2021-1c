@@ -145,7 +145,7 @@ void load(FILE* arch, char* name){
 }
 
 void suma(FILE* arch){
-    int op = desapilar();
+    char* op = desapilar();
     if (strcmp(op, "@stack") != 0)    
         load(arch, op);
     op = desapilar();
@@ -156,19 +156,59 @@ void suma(FILE* arch){
 }
 
 void resta(FILE* arch){
+    char* op2 = desapilar();
+    char* op1 = desapilar();
+    int op1inStack, op2inStack = 1;
+    if (strcmp(op1, "@stack") != 0) {   
+        load(arch, op1);
+        op1inStack = 0;
+    }
+    if (strcmp(op2, "@stack") != 0) { 
+        load(arch, op2);
+        op2inStack = 0;
+    }
+    if (!op1inStack && op2inStack)
+        // Si op1 no estaba en copro pero op2 si, quedaron al reves
+        fprintf(arch, "FCHS\n");
     fprintf(arch, "FSUB\n");
+    apilar("@stack");
 }
 
 void cambiar_signo(FILE* arch){
+    char* op = desapilar();
+    if (strcmp(op, "@stack") != 0)    
+        load(arch, op);
     fprintf(arch, "FCHS\n");
 }
 
 void multiplicacion(FILE* arch){
+    char* op = desapilar();
+    if (strcmp(op, "@stack") != 0)    
+        load(arch, op);
+    op = desapilar();
+    if (strcmp(op, "@stack") != 0)    
+        load(arch, op);
     fprintf(arch, "FMUL\n");
+    apilar("@stack");
 }
 
 void division(FILE* arch){
+    char* op2 = desapilar();
+    char* op1 = desapilar();
+    int op1inStack, op2inStack = 1;
+    if (strcmp(op1, "@stack") != 0) {   
+        load(arch, op1);
+        op1inStack = 0;
+    }
+    if (strcmp(op2, "@stack") != 0) { 
+        load(arch, op2);
+        op2inStack = 0;
+    }
+    if (!op1inStack && op2inStack)
+        // Si op1 no estaba en copro pero op2 si, quedaron al reves
+        fprintf(arch, "FCHS\n");
     fprintf(arch, "FDIV\n");
+    apilar("@stack");
 }
 
 void division_entera(FILE* arch){
