@@ -150,11 +150,16 @@ int PonerEnPolaca( char *cadena)
 	return OK;
 }
 
+int GetWriteIDX(){
+	return writeIdxPolaca;
+}
+
 int PonerEnPolacaNro(int pos, char *cadena)
 {
 	if(pos < 0 || pos >= MAX_TAM_POLACA||strlen(cadena)>CADENA_MAXIMA)
 	return ERROR;
-
+	printf(cadena);
+	printf(" ");
 	strcpy(polaca[pos].val, cadena);
 	return OK;
 }
