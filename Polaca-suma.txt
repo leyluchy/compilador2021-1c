@@ -1,1 +1,0 @@
-_cte_string_0 WRITE i _1 _3 MAS ASIG i WRITE 

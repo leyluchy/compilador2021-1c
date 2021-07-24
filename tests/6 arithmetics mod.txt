@@ -1,0 +1,11 @@
+DECVAR
+i : INT
+ENDDEC
+
+WRITE "Test mod: da 5"
+i := 15 MOD 10
+WRITE i3
+
+WRITE "Test negativo: da -2"
+i := -2
+WRITE i
