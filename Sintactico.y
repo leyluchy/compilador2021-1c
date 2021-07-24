@@ -215,14 +215,19 @@ entrada:
 	  ;
 
 asignacion: 
-      ID ASIG expresion{
+      ID ASIG {
+            char * nombre_var = (char*)$<str_val>1;
+            PonerEnPolaca(nombre_var);            
+      }expresion{
             PonerEnPolaca("ASIG");
       }
       |ID ASIG CTE_STRING
 	  {
+            char * nombre_var = (char*)$<str_val>1;
+            PonerEnPolaca(nombre_var);
+		char * nombre_cte_string = guardar_cte_string($<str_val>3);
+            PonerEnPolaca(nombre_cte_string);
             PonerEnPolaca("ASIG");
-              
-			char * nombre_cte_string = guardar_cte_string($<str_val>3);
 	  }
 	  ;
 	  
@@ -233,8 +238,14 @@ asignacion_mult:
 	  ;
 
 lista:
-	  ID ASIGMULT ID
-	  |lista ASIGMULT ID
+	  ID ASIGMULT ID{
+              PonerStringEnPila(pila, $<str_val>1);
+              PonerStringEnPila(pila, $<str_val>3);
+        }
+	  |lista ASIGMULT ID{
+              PonerStringEnPila(pila, $<str_val>3); //!!
+
+        }
 	  ;
 
 iteracion: 
