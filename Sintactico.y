@@ -15,6 +15,7 @@
       void yyerror(const char *s);
       
       t_pila* pila;
+      t_pila* pilaAsigMult;
       //t_polaca Polaca;
       //t_pila PilaIf;
       //t_pila PilaWhile;
@@ -232,18 +233,27 @@ asignacion:
 	  ;
 	  
 asignacion_mult:
-	  lista ASIGMULT expresion{
-              PonerEnPolaca("ASIGMULT");
+	  lista ASIGMULT{
+              char * ult = sacarDePila(pilaAsigMult);
+            PonerEnPolaca(ult);
+
+        } expresion{
+            PonerEnPolaca("ASIG");
+            while(topeDePila(pilaAsigMult)){
+                PonerEnPolaca(sacarDePila(pilaAsigMult));
+                PonerEnPolaca(ult);
+                PonerEnPolaca("ASIG");
+            }
         }
 	  ;
 
 lista:
 	  ID ASIGMULT ID{
-              PonerStringEnPila(pila, $<str_val>1);
-              PonerStringEnPila(pila, $<str_val>3);
+              PonerStringEnPila(pilaAsigMult, $<str_val>1);
+              PonerStringEnPila(pilaAsigMult, $<str_val>3);
         }
 	  |lista ASIGMULT ID{
-              PonerStringEnPila(pila, $<str_val>3); //!!
+              PonerStringEnPila(pilaAsigMult, $<str_val>3); //!!
 
         }
 	  ;
@@ -409,6 +419,7 @@ int main(int argc,char *argv[])
   else{
 	initArray(&array_nombres_variables);
     pila = crearPila();
+    pilaAsigMult = crearPila();
     crearTabla();
     CrearPolaca();
     yyparse();
