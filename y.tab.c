@@ -1553,7 +1553,7 @@ yyreduce:
 #line 102 "Sintactico.y"
     {
             // Guardar polaca
-            //generarAssembler();
+            generarAssembler();
             printf("\n##########\nCOMPILACION CORRECTA\n##########\n");
       }
     break;
