@@ -10,18 +10,10 @@
 #define OK 0
 
 //Pila
-typedef struct
-{
-	char *cadena;
-	int cantExpresiones;
-}t_info;
-
-typedef struct s_nodoPila{
-	t_info info;
-	struct s_nodoPila* psig;
-}t_nodoPila;
-
-typedef t_nodoPila *t_pila;
+typedef struct {
+	char* nodos[MAX_TAM_POLACA];
+	int top;
+} pila;
 
 //Polaca
 nodoPolaca polaca[MAX_TAM_POLACA];
@@ -38,77 +30,33 @@ void guardarPolaca();
 int PonerEnPolacaNro(int, char *);
 int PonerEnPolaca(char *);
 void CrearPolaca();
-//Funciones para manejo de pilas
-void vaciarPila();
-t_info* sacarDePila(t_pila*);
-t_pila* crearPila();
-int ponerEnPila(t_pila*,t_info*);
-t_info* topeDePila(t_pila*);
-
-//Notacion intermedia
-t_pila pilaAVG;
-t_pila pilaIf;
-t_pila pilaWhile;
-t_pila pilaASM;
 
 /////////////////Pila/////////////////////////////////////////////////////
-
-	t_pila* crearPila()
+	pila crearPila(){
+		pila p;
+		p.top = -1;
+		return p;
+	}
+	void ponerEnPila(pila* p, char* nodo)
 	{
-		// printf("CrearPila\n");
-	    t_pila* pp = (t_pila*)malloc(sizeof(t_nodoPila));
-		return pp;
+		p->top++;
+		p->nodos[p->top] = nodo;
 	}
 
-	int ponerEnPila(t_pila* pp,t_info* info)
+	char* sacarDePila(pila* p)
 	{
-		// printf("poner en Pila\n");
-
-	    t_nodoPila* pn=(t_nodoPila*)malloc(sizeof(t_nodoPila));
-	    if(!pn)
-	        return 0;
-	    pn->info=*info;
-	    pn->psig=*pp;
-	    *pp=pn;
-	    return 1;
+		char* aux = p->nodos[p->top];
+		p->top--;
+		return aux;
 	}
 
-	t_info * sacarDePila(t_pila* pp)
-	{
-		// printf("SacardEPila\n");
 
-		t_info* info = (t_info *) malloc(sizeof(t_info));
-	    if(!*pp){
-	    	return NULL;
-	    }
-	    *info=(*pp)->info;
-	    *pp=(*pp)->psig;
-	    return info;
-
+	char* topeDePila(pila* p){
+		return p->nodos[p->top];
 	}
 
-	void vaciarPila(t_pila* pp)
-	{
-		// printf("VaciarPila\n");
-
-	    t_nodoPila* pn;
-	    while(*pp)
-	    {
-	        pn=*pp;
-	        *pp=(*pp)->psig;
-	        free(pn);
-	    }
-	}
-
-	t_info* topeDePila(t_pila* pila){
-		return &((*pila)->info);
-	}
-                  
-	int PonerStringEnPila(t_pila* pp,char * str)
-	{
-		t_info info;
-		info.cadena = str;
-	    return ponerEnPila(pp, &info);
+	int pilaVacia(pila* p){
+		return p->top < 0;
 	}
 
 /////////////////POLACA/////////////////////////////////////////////////////
